@@ -87,17 +87,10 @@ private:
     float Cut_Off_Mid;
     float Cut_Off_Side;
 
-    juce::dsp::FirstOrderTPTFilter<float> MidSampler;   // For further filtering of delay time values
-    juce::dsp::FirstOrderTPTFilter<float> SideSampler;
-
-
-
     // Initialize Delay         Lagrange3rd is a high-quality interpolation <-> 3000 is longest num. of samples of delay tap
 
     juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> MidDelayModule{3000};
     juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> SideDelayModule{3000};
-
-    
 
     double Send_Mid = 0.f;
     juce::SmoothedValue<double> Time_Mid_Target = 0.f;
@@ -108,7 +101,6 @@ private:
     juce::SmoothedValue<double> Time_Side_Target = 0.f;
     double Time_Side = 0.f;
     double Feedback_Side = 0.f;
-
 
 
     //LFO Variables
@@ -135,9 +127,6 @@ private:
 
     int updateCounter = 100;
     int updateRate = 100;
-
-
-
 
 
     //==============================================================================

@@ -163,12 +163,6 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     MidDelayModule.prepare(spec);
     SideDelayModule.prepare(spec);
 
-    // Low pass filter initialization -> will be used for filtering out big changes in delay time
-
-    MidSampler.reset();
-    SideSampler.reset();
-    MidSampler.prepare(spec);
-    SideSampler.prepare(spec);
 
     //SmoothedValues -> Creates linear interpolation in parameter changes.
     
@@ -240,8 +234,6 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Inner loop handles samples within channel
             {               
 
-                float twoPi = juce::MathConstants<float>::twoPi; // stores twopi value
-
                 // LFOs
                 const auto LFO_Speed_Mid = LFO_Speed_Mid_Target.getNextValue();
                 const auto LFO_Speed_Side = LFO_Speed_Side_Target.getNextValue();
@@ -281,9 +273,6 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                 Time_Side = Time_Side_Target.getNextValue() + lfoValueSide;     // Add LFO to (ramped) Time_Side
                 Time_Mid = Time_Mid_Target.getNextValue() + lfoValueMid;        // Add LFO to (ramped) Time_Mid
-
-                Time_Side = SideSampler.processSample(0, Time_Side);      // Extra interpolation for Time_Mid
-                Time_Mid = MidSampler.processSample(0, Time_Mid);         // and Time_Side with low-pass filter
 
                // Regulator  
 
