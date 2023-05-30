@@ -179,13 +179,7 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     LFO_Depth_Side_Target.reset(sampleRate, rampTime);
     LFO_Speed_Mid_Target.reset(sampleRate, rampTime);
     LFO_Speed_Side_Target.reset(sampleRate, rampTime);
-        
-        //Others
-
-    lfoValueMid_Target.reset(sampleRate, rampTime);
-    lfoValueSide_Target.reset(sampleRate, rampTime);
- 
-    
+          
 }
 
 void MSUtilityAudioProcessor::releaseResources()
@@ -244,10 +238,8 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
              
                 float twoPie = juce::MathConstants<float>::twoPi; // stores two * pi value
 
-                if (updateCounter == updateRate) // Updates once per 100 (updateRate) samples
-                {
-                    lfoPhaseMid += twoPie * LFO_Speed_Mid * updateRate / getSampleRate();   // Phase goes from 0 to twoPi
-                    lfoPhaseSide += twoPie * LFO_Speed_Side * updateRate / getSampleRate(); // Once every Speed / sampleRate
+                    lfoPhaseMid += twoPie * LFO_Speed_Mid / getSampleRate();   // Phase goes from 0 to twoPi
+                    lfoPhaseSide += twoPie * LFO_Speed_Side / getSampleRate(); // Once every Speed / sampleRate
                                                                                             // * by updateRate ensures = result after counter
                     if (lfoPhaseMid > twoPie)        // This ensures lfoPhaseMid/Side 
                         lfoPhaseMid -= twoPie;       // does not increase indefinitely
@@ -255,24 +247,16 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                     if (lfoPhaseSide > twoPie)
                         lfoPhaseSide -= twoPie;
 
-                    lfoValueMid_Target.setTargetValue(LFO_Depth_Mid * std::sin(lfoPhaseMid));      // lfoPhase values are introduced into sin() - and ramped -
-                    lfoValueSide_Target.setTargetValue(LFO_Depth_Side * std::sin(lfoPhaseSide));   // returning a value from -1 to 1, scaled to LFO_Depth
-                                                                                                   // to -1000 to 1000 (max)
-                    updateCounter = 0;              //ensures counter re-starts
-                }
 
-                else
-                {
-                    updateCounter++;                // counter... counts (once per sample)
-                }
+               lfoValueMid = LFO_Depth_Mid * std::sin(lfoPhaseMid);      // lfoPhase values are introduced into sin() - and ramped -
+               lfoValueSide = LFO_Depth_Side * std::sin(lfoPhaseSide);   // returning a value from -1 to 1, scaled to LFO_Depth
+                                                                         // to -1000 to 1000 (max)
 
-                lfoValueMid = lfoValueMid_Target.getNextValue();                // lfo values are extracted
-                lfoValueSide = lfoValueSide_Target.getNextValue();
 
-                //Time Modulation
+               //Time Modulation
 
-                Time_Side = Time_Side_Target.getNextValue() + lfoValueSide;     // Add LFO to (ramped) Time_Side
-                Time_Mid = Time_Mid_Target.getNextValue() + lfoValueMid;        // Add LFO to (ramped) Time_Mid
+               Time_Side = Time_Side_Target.getNextValue() + lfoValueSide;     // Add LFO to (ramped) Time_Side
+               Time_Mid = Time_Mid_Target.getNextValue() + lfoValueMid;        // Add LFO to (ramped) Time_Mid
 
                // Regulator  
 

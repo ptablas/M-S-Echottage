@@ -108,10 +108,6 @@ private:
     double lfoPhaseMid = 0;
     double lfoPhaseSide = 0;
 
-    juce::SmoothedValue<double> lfoValueMid_Target = 0;
-    juce::SmoothedValue<double> lfoValueSide_Target = 0;
-
-
     double lfoValueMid = 0;
     double lfoValueSide = 0;
 
@@ -124,10 +120,6 @@ private:
     juce::SmoothedValue<double> LFO_Depth_Side_Target = 0;
     double LFO_Speed_Side = 0;
     double LFO_Depth_Side = 0;
-
-    int updateCounter = 100;
-    int updateRate = 100;
-
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MSUtilityAudioProcessor)
