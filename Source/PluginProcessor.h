@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "LFO.h"
 
 //==============================================================================
 /**
@@ -104,6 +105,9 @@ private:
 
 
     //LFO Variables
+
+    LFO lfoMid;
+    LFO lfoSide;
 
     double lfoPhaseMid = 0;
     double lfoPhaseSide = 0;

@@ -9,6 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+#include "LFO.h"
 
 //==============================================================================
 MSUtilityAudioProcessor::MSUtilityAudioProcessor()
@@ -225,33 +226,20 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             auto* channelDataLeft = buffer.getWritePointer(0);
             auto* channelDataRight = buffer.getWritePointer(1);
 
-            for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Inner loop handles samples within channel
+            for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
             {               
 
-                // LFOs
-                const auto LFO_Speed_Mid = LFO_Speed_Mid_Target.getNextValue();
-                const auto LFO_Speed_Side = LFO_Speed_Side_Target.getNextValue();
-                const auto LFO_Depth_Mid = LFO_Depth_Mid_Target.getNextValue();
-                const auto LFO_Depth_Side = LFO_Depth_Side_Target.getNextValue();
+               // LFOs values from GUI
+
+               const auto LFO_Speed_Mid = LFO_Speed_Mid_Target.getNextValue();
+               const auto LFO_Speed_Side = LFO_Speed_Side_Target.getNextValue();
+               const auto LFO_Depth_Mid = LFO_Depth_Mid_Target.getNextValue();
+               const auto LFO_Depth_Side = LFO_Depth_Side_Target.getNextValue();
                 
-                //LFO Phase Calculation <- needed for LFOs
-             
-                float twoPie = juce::MathConstants<float>::twoPi; // stores two * pi value
+               //LFO Phase Calculation <- needed for LFOs
 
-                    lfoPhaseMid += twoPie * LFO_Speed_Mid / getSampleRate();   // Phase goes from 0 to twoPi
-                    lfoPhaseSide += twoPie * LFO_Speed_Side / getSampleRate(); // Once every Speed / sampleRate
-                                                                                            // * by updateRate ensures = result after counter
-                    if (lfoPhaseMid > twoPie)        // This ensures lfoPhaseMid/Side 
-                        lfoPhaseMid -= twoPie;       // does not increase indefinitely
-
-                    if (lfoPhaseSide > twoPie)
-                        lfoPhaseSide -= twoPie;
-
-
-               lfoValueMid = LFO_Depth_Mid * std::sin(lfoPhaseMid);      // lfoPhase values are introduced into sin() - and ramped -
-               lfoValueSide = LFO_Depth_Side * std::sin(lfoPhaseSide);   // returning a value from -1 to 1, scaled to LFO_Depth
-                                                                         // to -1000 to 1000 (max)
-
+               lfoValueMid = lfoMid.output(getSampleRate(), LFO_Speed_Mid, LFO_Depth_Mid);
+               lfoValueSide = lfoSide.output(getSampleRate(), LFO_Speed_Side, LFO_Depth_Side);
 
                //Time Modulation
 
@@ -362,7 +350,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                     channelDataRight[sample] = xSide;
                 }
             }
-        
+     
     }
 }
 
