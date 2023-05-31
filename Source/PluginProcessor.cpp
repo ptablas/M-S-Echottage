@@ -9,7 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-#include "LFO.h"
+#include "Osc_Sine.h"
 
 //==============================================================================
 MSUtilityAudioProcessor::MSUtilityAudioProcessor()
@@ -238,8 +238,8 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                 
                //LFO Phase Calculation <- needed for LFOs
 
-               lfoValueMid = lfoMid.output(getSampleRate(), LFO_Speed_Mid, LFO_Depth_Mid);
-               lfoValueSide = lfoSide.output(getSampleRate(), LFO_Speed_Side, LFO_Depth_Side);
+               lfoValueMid = lfoMid.output(LFO_Speed_Mid, LFO_Depth_Mid);
+               lfoValueSide = lfoSide.output(LFO_Speed_Side, LFO_Depth_Side);
 
                //Time Modulation
 
