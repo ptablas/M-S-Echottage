@@ -75,17 +75,7 @@ Delay is the essence of many other sound effects. Filters and Comb filters make 
 
 Although some of these effects require external capabilities (such as feedforward for flangers or multi-tap delay for filters), this VST aims to show pragmatically the wide scope of delay effects. Allowing this control in combination with Mid/Side capabilities allows the user to introduce this variety of effects to the independent Mid and Side parts accurately, allowing huge amounts of control to already-finished stereo tracks.
 
-
-## Notes
-
-### Interpolation issues and fast delay time changes.
-
-Although it is possible to modulate the delay time at extreme LFO limits, artifacts occur. This is even after stages of linear interpolation performed in the parameters that modulate delay time, which, moreover, goes through low-pass filtering and, eventually, 3rd order Lagrange interpolation through the delay line class itself.
-
-It is likely these sort of capabilities should not be performed on a sample per sample basis - instead they might be better dealt with as blocks.
-
-Either way, this appears to be subject of literature https://core.ac.uk/download/344942451.pdf - and probably outwith the scope of the project at hand. However, further work in this direction should be undertaken.
-
+3rd Order Lafrange interpolation is used in order to explore high-depth high-rate delay-time modulation without perceptible artefacts.
 
 ## Bibliography:
 
