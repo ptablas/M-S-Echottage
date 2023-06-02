@@ -22,7 +22,7 @@ class Osc_Sine
     public:
         
         Osc_Sine()
-            : m_phase(0), m_speed(0), m_depth(0), m_sampleRate(48000)
+            : m_phase(0), m_speed(0), m_depth(0)
         {
         }
 

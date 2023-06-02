@@ -157,6 +157,11 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     MidFilterModule.prepare(spec);                   
     SideFilterModule.prepare(spec);
 
+    // LFO initialization
+
+    lfoMid.prepare(sampleRate);
+    lfoSide.prepare(sampleRate);
+
     // Delay Modules Initializiation                    << Delays here and so on...
 
     MidDelayModule.reset();
@@ -218,11 +223,12 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
+    double sampeleratero = getSampleRate();
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) // Clears channels from trash data
         buffer.clear (i, 0, buffer.getNumSamples());
     {
-
+            
             auto* channelDataLeft = buffer.getWritePointer(0);
             auto* channelDataRight = buffer.getWritePointer(1);
 

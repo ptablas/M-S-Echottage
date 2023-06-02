@@ -14,8 +14,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="j7ZWqa" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="k5bYQK" name="LFO.cpp" compile="1" resource="0" file="Source/LFO.cpp"/>
-    <FILE id="r1HHGd" name="LFO.h" compile="0" resource="0" file="Source/LFO.h"/>
+    <FILE id="k5bYQK" name="Osc_Sine.cpp" compile="1" resource="0" file="Source/Osc_Sine.cpp"/>
+    <FILE id="r1HHGd" name="Osc_Sine.h" compile="0" resource="0" file="Source/Osc_Sine.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

@@ -12,7 +12,7 @@
 
 void Osc_Sine::prepare(double sR)
 {
-    sR = m_sampleRate;
+    m_sampleRate = sR;
 }
 
 double Osc_Sine::output(double speed, double depth)
