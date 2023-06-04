@@ -24,34 +24,62 @@ double Osc::output(double speed, double depth)
 {
     m_speed = speed;
     m_depth = depth;
-    double out;
+
+    m_phase += twoPie * m_speed / m_sampleRate;
+
+    if (m_phase > twoPie)
+        m_phase -= twoPie;
 
     switch (m_waveform)
     {
         case Sine:
             
-            m_phase += twoPie * m_speed / m_sampleRate;
+            out = std::sin(m_phase);
 
-            if (m_phase > twoPie)
-                m_phase -= twoPie;
-
-            out = m_depth * std::sin(m_phase);
             break;
 
         case Triangle:
 
-
+            if (m_phase <= Pie)
+            {
+                out = m_phase / Pie;
+            }
+            
+            else
+            {
+                out = (m_phase / Pie) - 1;
+            }
 
             break;
+
         case Sawtooth:
+
+            out = m_phase / twoPie;
+
             break;
+
         case Square:
+
+            if (m_phase >= Pie)
+            {
+                out = 1;
+            }
+
+            else
+            {
+                out = -1;
+            }
+
             break;
+
         case Random:
+
+            out = (((rand() % 200000) - 100000) / static_cast<double> (100000));
+
             break;
     }
     
-    return out;
+    return (out * m_depth);
 }
 
 

@@ -15,15 +15,20 @@
 
 class Osc
 {
-    private:
-        const double twoPie = 6.28318530718; // stores two * pi value
-        double m_sampleRate;
-        double m_phase, m_speed, m_depth;
+    public:
+
         enum Waveform
         {
             Sine = 0, Triangle, Square, Sawtooth, Random
         };
+
+    private:
+        const double Pie = 3.14159265359;
+        const double twoPie = 6.28318530718;
+        double m_sampleRate;
+        double m_phase, m_speed, m_depth;
         Waveform m_waveform;
+        double out = 0;
 
     public:
         
