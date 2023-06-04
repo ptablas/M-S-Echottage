@@ -30,6 +30,7 @@ double Osc::output(double speed, double depth)
     if (m_phase > twoPie)
         m_phase -= twoPie;
 
+
     switch (m_waveform)
     {
         case Sine:
@@ -75,6 +76,17 @@ double Osc::output(double speed, double depth)
         case Random:
 
             out = (((rand() % 200000) - 100000) / static_cast<double> (100000));
+
+            break;
+
+        case SH:
+
+            if (m_phase == 0)
+            {
+                out = (((rand() % 200000) - 100000) / static_cast<double> (100000));
+            }
+
+            else
 
             break;
     }

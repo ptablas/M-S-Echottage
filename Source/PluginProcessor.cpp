@@ -161,7 +161,7 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     lfoMid.prepare(sampleRate);
     lfoSide.prepare(sampleRate);
-   // lfoMid.setWaveform(Osc::Sine);
+    lfoMid.setWaveform(Osc::SH);
    // lfoSide.setWaveform(Osc::Triangle);
 
     // Delay Modules Initializiation                    << Delays here and so on...
@@ -354,8 +354,8 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                 }
                 else // output == mid/side
                 {    // Channels Are Left in Mid and Side                                     
-                    channelDataLeft[sample] = lfoValueMid;
-                    channelDataRight[sample] = lfoValueSide;
+                    channelDataLeft[sample] = xMid;
+                    channelDataRight[sample] = xSide;
                 }
             }
      

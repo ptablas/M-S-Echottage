@@ -19,7 +19,7 @@ class Osc
 
         enum Waveform
         {
-            Sine = 0, Triangle, Square, Sawtooth, Random
+            Sine = 0, Triangle, Square, Sawtooth, Random, SH
         };
 
     private:
