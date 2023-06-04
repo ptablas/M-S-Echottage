@@ -22,14 +22,9 @@ void Osc::setWaveform(Waveform waveform)
 
 double Osc::output(double speed, double depth)
 {
+    double out;
     m_speed = speed;
     m_depth = depth;
-
-    m_phase += twoPie * m_speed / m_sampleRate;
-
-    if (m_phase > twoPie)
-        m_phase -= twoPie;
-
 
     switch (m_waveform)
     {
@@ -41,14 +36,14 @@ double Osc::output(double speed, double depth)
 
         case Triangle:
 
-            if (m_phase <= Pie)
+            if (m_phase > 0)
             {
-                out = m_phase / Pie;
+                out = -1 + (2 * m_phase / Pie);
             }
             
             else
             {
-                out = (m_phase / Pie) - 1;
+                out = -1 - (2 * m_phase / Pie);
             }
 
             break;
@@ -61,7 +56,7 @@ double Osc::output(double speed, double depth)
 
         case Square:
 
-            if (m_phase >= Pie)
+            if (m_phase > 0)
             {
                 out = 1;
             }
@@ -81,17 +76,27 @@ double Osc::output(double speed, double depth)
 
         case SH:
 
-            if (m_phase == 0)
+            if (m_sampler == 1)
             {
                 out = (((rand() % 200000) - 100000) / static_cast<double> (100000));
+                m_sampler = 0;
             }
-
-            else
 
             break;
     }
     
+    calculatePhase();
     return (out * m_depth);
 }
 
 
+void Osc::calculatePhase()
+{
+    m_phase += twoPie * m_speed / m_sampleRate;
+
+    if (m_phase > Pie)
+    {
+        m_phase -= twoPie;
+        m_sampler = 1;
+    }
+}

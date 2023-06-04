@@ -161,7 +161,7 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     lfoMid.prepare(sampleRate);
     lfoSide.prepare(sampleRate);
-    lfoMid.setWaveform(Osc::SH);
+   // lfoMid.setWaveform(Osc::SH);                      << Testing other waveforms
    // lfoSide.setWaveform(Osc::Triangle);
 
     // Delay Modules Initializiation                    << Delays here and so on...

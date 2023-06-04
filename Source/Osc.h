@@ -19,16 +19,22 @@ class Osc
 
         enum Waveform
         {
-            Sine = 0, Triangle, Square, Sawtooth, Random, SH
+            Sine = 0, 
+            Triangle, 
+            Square, 
+            Sawtooth, 
+            Random, 
+            SH
         };
 
     private:
-        const double Pie = 3.14159265359;
+        const double Pie =    3.14159265359;
         const double twoPie = 6.28318530718;
+
         double m_sampleRate;
         double m_phase, m_speed, m_depth;
         Waveform m_waveform;
-        double out = 0;
+        bool m_sampler = 0;
 
     public:
         
@@ -53,6 +59,8 @@ class Osc
         }
 
         void prepare(double sR);
+
+        void calculatePhase();
         
         void setWaveform(Waveform waveform);
 
