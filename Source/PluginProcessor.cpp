@@ -9,7 +9,7 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
-#include "Osc_Sine.h"
+#include "Osc.h"
 
 //==============================================================================
 MSUtilityAudioProcessor::MSUtilityAudioProcessor()

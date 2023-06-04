@@ -5,7 +5,6 @@
               pluginAUExportPrefix="M/S Echo-ttage">
   <MAINGROUP id="kgGTjG" name="MSUtility">
     <GROUP id="{815ADB0C-8EAF-D3AD-3E1C-F7F4A3FBDF55}" name="Source">
-      <FILE id="gJQpWJ" name="Global.h" compile="0" resource="0" file="Source/Global.h"/>
       <FILE id="AFFtMK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="aOAqSv" name="PluginProcessor.h" compile="0" resource="0"
@@ -14,8 +13,8 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="j7ZWqa" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="k5bYQK" name="Osc_Sine.cpp" compile="1" resource="0" file="Source/Osc_Sine.cpp"/>
-    <FILE id="r1HHGd" name="Osc_Sine.h" compile="0" resource="0" file="Source/Osc_Sine.h"/>
+    <FILE id="ONN334" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
+    <FILE id="bU6Vpn" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

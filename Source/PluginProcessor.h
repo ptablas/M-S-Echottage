@@ -9,7 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
-#include "Osc_Sine.h"
+#include "Osc.h"
 
 //==============================================================================
 /**
@@ -106,8 +106,8 @@ private:
 
     //LFO Variables
 
-    Osc_Sine lfoMid;
-    Osc_Sine lfoSide;
+    Osc lfoMid;
+    Osc lfoSide;
 
     double lfoPhaseMid = 0;
     double lfoPhaseSide = 0;
