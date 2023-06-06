@@ -22,7 +22,6 @@ void Osc::setWaveform(Waveform waveform)
 
 double Osc::output(double speed, double depth)
 {
-    double out;
     m_speed = speed;
     m_depth = depth;
 
@@ -30,7 +29,7 @@ double Osc::output(double speed, double depth)
     {
         case Sine:
             
-            out = std::sin(m_phase);
+            m_out = std::sin(m_phase);
 
             break;
 
@@ -38,19 +37,19 @@ double Osc::output(double speed, double depth)
 
             if (m_phase > 0)
             {
-                out = -1 + (2 * m_phase / Pie);
+                m_out = -1 + (2 * m_phase / Pie);
             }
             
             else
             {
-                out = -1 - (2 * m_phase / Pie);
+                m_out = -1 - (2 * m_phase / Pie);
             }
 
             break;
 
         case Sawtooth:
 
-            out = m_phase / twoPie;
+            m_out = m_phase / twoPie;
 
             break;
 
@@ -58,19 +57,19 @@ double Osc::output(double speed, double depth)
 
             if (m_phase > 0)
             {
-                out = 1;
+                m_out = 1;
             }
 
             else
             {
-                out = -1;
+                m_out = -1;
             }
 
             break;
 
         case Random:
 
-            out = (((rand() % 200000) - 100000) / static_cast<double> (100000));
+            m_out = m_randomDouble();
 
             break;
 
@@ -78,7 +77,8 @@ double Osc::output(double speed, double depth)
 
             if (m_sampler == 1)
             {
-                out = (((rand() % 200000) - 100000) / static_cast<double> (100000));
+                m_out = m_randomDouble();
+
                 m_sampler = 0;
             }
 
@@ -86,7 +86,7 @@ double Osc::output(double speed, double depth)
     }
     
     calculatePhase();
-    return (out * m_depth);
+    return (m_out * m_depth);
 }
 
 
@@ -99,4 +99,13 @@ void Osc::calculatePhase()
         m_phase -= twoPie;
         m_sampler = 1;
     }
+}
+
+double Osc::m_randomDouble()
+{
+    std::random_device rd;  // Will be used to obtain a seed for the random number engine
+    std::mt19937 gen(rd()); // Standard mersenne_twister_engine seeded with rd()
+    std::uniform_real_distribution<> dis(-1.0, 1.0);
+
+    return dis(gen);
 }

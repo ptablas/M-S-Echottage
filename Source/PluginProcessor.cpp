@@ -161,7 +161,7 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     lfoMid.prepare(sampleRate);
     lfoSide.prepare(sampleRate);
-   // lfoMid.setWaveform(Osc::SH);                      << Testing other waveforms
+    lfoMid.setWaveform(Osc::SH);                     // << Testing other waveforms
    // lfoSide.setWaveform(Osc::Triangle);
 
     // Delay Modules Initializiation                    << Delays here and so on...
@@ -248,6 +248,11 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                lfoValueMid = lfoMid.output(LFO_Speed_Mid, LFO_Depth_Mid);
                lfoValueSide = lfoSide.output(LFO_Speed_Side, LFO_Depth_Side);
+
+               if (*lfoMid.sampler == true)
+               {
+                   int i = 0;
+               }
 
                //Time Modulation
 
