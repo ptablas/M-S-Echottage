@@ -63,24 +63,10 @@ class Osc
             : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(waveform), m_sampleRate(sR)
         {
         }
-
-        // bool *sampler = &m_sampler; useful for changes in 
  
         void prepare(double sR);
         
         void setWaveform(Waveform waveform);
 
         double output(double speed, double depth); 
-};
-
-class LFO : public Osc
-{
-private:
-    int lfoUpdateRate = 100;
-    int lfoUpdateCounter = 100;
-    void m_calculatePhase();
-
-public:
-    double output(double speed, double depth);
-
 };

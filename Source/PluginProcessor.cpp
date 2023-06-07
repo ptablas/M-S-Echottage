@@ -50,14 +50,14 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
            std::make_unique<juce::AudioParameterFloat>("timemid", "TimeMid", 0.f, 2000.f, 0.f), // Delay time in samples
            std::make_unique<juce::AudioParameterFloat>("lfospeedmid", "LFOSpeedMid", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f), //in Hertz
            std::make_unique<juce::AudioParameterFloat>("lfodepthmid", "LFODepthMid", juce::NormalisableRange<float> {0.f, 2000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in samples (since it modulates time) Again skew factor
-           std::make_unique<juce::AudioParameterFloat>("feedbackmid", "FeedbackMid", 0.f, 0.8f, 0.0001f),
+           std::make_unique<juce::AudioParameterFloat>("feedbackmid", "FeedbackMid", 0.f, 0.9f, 0.0001f),
 
                 //Side
            std::make_unique<juce::AudioParameterFloat>("sendside", "SendSide", 0.f, 1.f, 0.f),
            std::make_unique<juce::AudioParameterFloat>("timeside", "TimeSide", 0.f, 2000.f, 0.f), // In samples
            std::make_unique<juce::AudioParameterFloat>("lfospeedside", "LFOSpeedSide", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f),
            std::make_unique<juce::AudioParameterFloat>("lfodepthside", "LFODepthSide", juce::NormalisableRange<float> {0.f, 2000.f / 2.f, 0.0001f, 0.6f}, 0.f),
-           std::make_unique<juce::AudioParameterFloat>("feedbackside", "FeedbackSide", 0.f, 0.8f, 0.0001f),
+           std::make_unique<juce::AudioParameterFloat>("feedbackside", "FeedbackSide", 0.f, 0.9f, 0.0001f),
                            })
 #endif
 {
@@ -161,8 +161,6 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     lfoMid.prepare(sampleRate);
     lfoSide.prepare(sampleRate);
-   //lfoMid.setWaveform(Osc::SH);                     // << Testing other waveforms
-   // lfoSide.setWaveform(Osc::Triangle);
 
     // Delay Modules Initializiation                    << Delays here and so on...
 
@@ -245,15 +243,9 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                const auto LFO_Depth_Side = LFO_Depth_Side_Target.getNextValue();
                 
                //LFO Phase Calculation <- needed for LFOs
-
+                   
                lfoValueMid = lfoMid.output(LFO_Speed_Mid, LFO_Depth_Mid);
                lfoValueSide = lfoSide.output(LFO_Speed_Side, LFO_Depth_Side);
-
-               /*if (*lfoMid.sampler == true)
-               {
-                   int i = 0;                   << Useful bit for testing changes in SH (within Osc class)
-               }
-               */
 
                //Time Modulation
 
@@ -262,15 +254,8 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                // Regulator  
 
-               if (Time_Side < 0)           // Keeps modulation oscillating
-               {                            // smoothly instead
-               Time_Side = -Time_Side;      // of stalling at 0
-               }
-
-               if (Time_Mid < 0)
-               {
-               Time_Mid = -Time_Mid;
-               }              
+               Time_Side = regulator(Time_Side);
+               Time_Mid = regulator(Time_Mid);
                
                // Delay values are finally updated
 
@@ -311,10 +296,10 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                     //Mid
                 
-               float dry = xMidFilt;                                                      // We take the filtered signal
+               float dry = xMidFilt;                                                // We take the filtered signal
                float wet = MidDelayModule.popSample(0, Time_Mid);                   // Extract a delayed sample (read)
                MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Introduce a Sample into the delay module (write) - reintroducing the wet signal creates feedback
-               float xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);                    // Here the dry and wet signals are mixed
+               float xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);              // Here the dry and wet signals are mixed
 
                     //Side
 

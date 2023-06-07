@@ -133,7 +133,7 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     feedbackmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "feedbackmid", feedbackmidDial);
     feedbackmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    feedbackmidDial.setRange(0.f, 0.8f, 0.0001f);
+    feedbackmidDial.setRange(0.f, 0.9f, 0.0001f);
     feedbackmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&feedbackmidDial);
 
@@ -175,7 +175,7 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     feedbacksideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "feedbackside", feedbacksideDial);
     feedbacksideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    feedbacksideDial.setRange(0.f, 0.8f, 0.0001f);
+    feedbacksideDial.setRange(0.f, 0.9f, 0.0001f);
     feedbacksideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&feedbacksideDial);
 

@@ -103,27 +103,29 @@ private:
     double Time_Side = 0.f;
     double Feedback_Side = 0.f;
 
+    // Time Regulator
+
+    double regulator(double time)
+    {
+        if (time < 0)
+            return -time;
+        else
+            return time;
+    }
 
     //LFO Variables
 
-    LFO lfoMid;
+    Osc lfoMid;
     Osc lfoSide;
-
-    double lfoPhaseMid = 0;
-    double lfoPhaseSide = 0;
 
     double lfoValueMid = 0;
     double lfoValueSide = 0;
 
     juce::SmoothedValue<double> LFO_Speed_Mid_Target = 0;
     juce::SmoothedValue<double> LFO_Depth_Mid_Target = 0;
-    double LFO_Speed_Mid = 0;
-    double LFO_Depth_Mid = 0;
 
     juce::SmoothedValue<double> LFO_Speed_Side_Target = 0;
     juce::SmoothedValue<double> LFO_Depth_Side_Target = 0;
-    double LFO_Speed_Side = 0;
-    double LFO_Depth_Side = 0;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MSUtilityAudioProcessor)
