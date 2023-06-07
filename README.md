@@ -9,7 +9,7 @@ https://github.com/ptablas/M-S-Echottage/wiki
 
 # Acknowledgments
 
-All the code pertainign to the "Osc" class used for the LFOs is heavily based on the set of lectures *C++ Real-Time Audio Programming with Bela* by Andrew McPherson.
+Most of the code pertainign to the "Osc" class used for the LFOs is heavily based on the set of lectures *C++ Real-Time Audio Programming with Bela* by Andrew McPherson.
 
 # Libraries
 
