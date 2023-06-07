@@ -106,7 +106,7 @@ private:
 
     //LFO Variables
 
-    Osc lfoMid;
+    LFO lfoMid;
     Osc lfoSide;
 
     double lfoPhaseMid = 0;

@@ -29,7 +29,7 @@ class Osc
             SH
         };
 
-    private:
+    protected:
         const double Pie =    3.14159265359;
         const double twoPie = 6.28318530718;
 
@@ -37,8 +37,10 @@ class Osc
         double m_phase, m_speed, m_depth, m_out;
         Waveform m_waveform;
         bool m_sampler = 0;
+        void m_calculatePhase();
 
         double m_randomDouble();
+        void m_waveSwitch();
 
     public:
         
@@ -62,13 +64,22 @@ class Osc
         {
         }
 
-        bool *sampler = &m_sampler;
-
+        // bool *sampler = &m_sampler; useful for changes in 
+ 
         void prepare(double sR);
-
-        void calculatePhase();
         
         void setWaveform(Waveform waveform);
 
         double output(double speed, double depth); 
+};
+
+class LFO : public Osc
+{
+private:
+    double m_downsample = 0;    
+    void m_calculatePhase();
+
+public:
+    double output(double speed, double depth);
+
 };

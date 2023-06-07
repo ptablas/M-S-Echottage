@@ -25,72 +25,76 @@ double Osc::output(double speed, double depth)
     m_speed = speed;
     m_depth = depth;
 
-    switch (m_waveform)
-    {
-        case Sine:
-            
-            m_out = std::sin(m_phase);
+    m_waveSwitch();
+    m_calculatePhase();
 
-            break;
-
-        case Triangle:
-
-            if (m_phase > 0)
-            {
-                m_out = -1 + (2 * m_phase / Pie);
-            }
-            
-            else
-            {
-                m_out = -1 - (2 * m_phase / Pie);
-            }
-
-            break;
-
-        case Sawtooth:
-
-            m_out = m_phase / twoPie;
-
-            break;
-
-        case Square:
-
-            if (m_phase > 0)
-            {
-                m_out = 1;
-            }
-
-            else
-            {
-                m_out = -1;
-            }
-
-            break;
-
-        case Random:
-
-            m_out = m_randomDouble();
-
-            break;
-
-        case SH:
-
-            if (m_sampler == 1)
-            {
-                m_out = m_randomDouble();
-
-                m_sampler = 0;
-            }
-
-            break;
-    }
-    
-    calculatePhase();
     return (m_out * m_depth);
 }
 
+void Osc::m_waveSwitch()
+{
+    switch (m_waveform)
+    {
+    case Sine:
 
-void Osc::calculatePhase()
+        m_out = std::sin(m_phase);
+
+        break;
+
+    case Triangle:
+
+        if (m_phase > 0)
+        {
+            m_out = -1 + (2 * m_phase / Pie);
+        }
+
+        else
+        {
+            m_out = -1 - (2 * m_phase / Pie);
+        }
+
+        break;
+
+    case Sawtooth:
+
+        m_out = m_phase / twoPie;
+
+        break;
+
+    case Square:
+
+        if (m_phase > 0)
+        {
+            m_out = 1;
+        }
+
+        else
+        {
+            m_out = -1;
+        }
+
+        break;
+
+    case Random:
+
+        m_out = m_randomDouble();
+
+        break;
+
+    case SH:
+
+        if (m_sampler == 1)
+        {
+            m_out = m_randomDouble();
+
+            m_sampler = 0;
+        }
+
+        break;
+    }
+}
+
+void Osc::m_calculatePhase()
 {
     m_phase += twoPie * m_speed / m_sampleRate;
 
@@ -108,4 +112,36 @@ double Osc::m_randomDouble()
     std::uniform_real_distribution<> dis(-1.0, 1.0);
 
     return dis(gen);
+}
+
+double LFO::output(double speed, double depth)
+{
+    m_speed = speed;
+    m_depth = depth;
+
+    m_downsample += m_speed * 2 / m_sampleRate;
+
+
+    if (m_downsample >= m_speed * 2)
+    {
+
+        m_waveSwitch();
+        m_calculatePhase();
+
+        m_downsample = 0;
+    }
+
+    return (m_out * m_depth);
+
+}
+
+void LFO::m_calculatePhase()
+{
+    m_phase += twoPie * m_speed * (m_speed * 2) / m_sampleRate;
+
+    if (m_phase > Pie)
+    {
+        m_phase -= twoPie;
+        m_sampler = 1;
+    }
 }
