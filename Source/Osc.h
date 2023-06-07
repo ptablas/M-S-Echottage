@@ -76,7 +76,8 @@ class Osc
 class LFO : public Osc
 {
 private:
-    double m_downsample = 0;    
+    int lfoUpdateRate = 100;
+    int lfoUpdateCounter = 100;
     void m_calculatePhase();
 
 public:

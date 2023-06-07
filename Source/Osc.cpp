@@ -116,28 +116,25 @@ double Osc::m_randomDouble()
 
 double LFO::output(double speed, double depth)
 {
-    m_speed = speed;
-    m_depth = depth;
-
-    m_downsample += m_speed * 2 / m_sampleRate;
-
-
-    if (m_downsample >= m_speed * 2)
+    if (lfoUpdateCounter == lfoUpdateRate)
     {
+        m_speed = speed;
+        m_depth = depth;
 
         m_waveSwitch();
         m_calculatePhase();
-
-        m_downsample = 0;
+        
+        lfoUpdateCounter = 0;
     }
 
-    return (m_out * m_depth);
+    lfoUpdateCounter++;
 
+    return (m_out * m_depth);
 }
 
 void LFO::m_calculatePhase()
 {
-    m_phase += twoPie * m_speed * (m_speed * 2) / m_sampleRate;
+    m_phase += twoPie * m_speed * lfoUpdateRate / m_sampleRate;
 
     if (m_phase > Pie)
     {
