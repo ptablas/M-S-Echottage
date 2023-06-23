@@ -103,16 +103,6 @@ private:
     double Time_Side = 0.f;
     double Feedback_Side = 0.f;
 
-    // Time Regulator
-
-    double regulator(double time)
-    {
-        if (time < 0)
-            return -time;
-        else
-            return time;
-    }
-
     //LFO Variables
 
     Osc lfoMid;

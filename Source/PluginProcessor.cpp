@@ -247,15 +247,10 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                lfoValueMid = lfoMid.output(LFO_Speed_Mid, LFO_Depth_Mid);
                lfoValueSide = lfoSide.output(LFO_Speed_Side, LFO_Depth_Side);
 
-               //Time Modulation
+               //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
 
-               Time_Side = Time_Side_Target.getNextValue() + lfoValueSide;     // Add LFO to (ramped) Time_Side
-               Time_Mid = Time_Mid_Target.getNextValue() + lfoValueMid;        // Add LFO to (ramped) Time_Mid
-
-               // Regulator  
-
-               Time_Side = regulator(Time_Side);
-               Time_Mid = regulator(Time_Mid);
+               Time_Side =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
+               Time_Mid =   [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
                
                // Delay values are finally updated
 
