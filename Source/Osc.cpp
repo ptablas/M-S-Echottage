@@ -10,6 +10,7 @@
 
 #include "Osc.h"
 
+
 void Osc::prepare(double sR)
 {
     m_sampleRate = sR;
@@ -45,19 +46,19 @@ void Osc::m_waveSwitch()
 
         if (m_phase > 0)
         {
-            m_out = -1 + (2 * m_phase / Pie);
+            m_out = -1 + (2 * m_phase / M_PI);
         }
 
         else
         {
-            m_out = -1 - (2 * m_phase / Pie);
+            m_out = -1 - (2 * m_phase / M_PI);
         }
 
         break;
 
     case Sawtooth:
 
-        m_out = m_phase / twoPie;
+        m_out = m_phase / (2 * M_PI);
 
         break;
 
@@ -96,11 +97,11 @@ void Osc::m_waveSwitch()
 
 void Osc::m_calculatePhase()
 {
-    m_phase += twoPie * m_speed / m_sampleRate;
+    m_phase += (2 * M_PI) * m_speed / m_sampleRate;
 
-    if (m_phase > Pie)
+    if (m_phase > M_PI)
     {
-        m_phase -= twoPie;
+        m_phase -= (2 * M_PI);
         m_sampler = 1;
     }
 }

@@ -9,29 +9,26 @@
 */
 
 #pragma once
+
+#define _USE_MATH_DEFINES
 #include <cmath>
 #include <random>
 #include <JuceHeader.h>
 
 
-
 class Osc
 {
-    public:
+    protected:
 
         enum Waveform
         {
-            Sine = 0, 
-            Triangle, 
-            Square, 
-            Sawtooth, 
-            Random, 
+            Sine = 0,
+            Triangle,
+            Square,
+            Sawtooth,
+            Random,
             SH
         };
-
-    protected:
-        const double Pie =    3.14159265359;
-        const double twoPie = 6.28318530718;
 
         double m_sampleRate;
         double m_phase, m_speed, m_depth, m_out;
