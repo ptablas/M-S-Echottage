@@ -30,7 +30,7 @@ class Osc
             SH
         };
 
-    private:
+private:
 
         double m_sampleRate;
         double m_phase, m_speed, m_depth, m_out;
