@@ -18,7 +18,7 @@
 
 class Osc
 {
-    protected:
+    public:
 
         enum Waveform
         {
@@ -30,12 +30,14 @@ class Osc
             SH
         };
 
+    private:
+
         double m_sampleRate;
         double m_phase, m_speed, m_depth, m_out;
         Waveform m_waveform;
         bool m_sampler = 0;
+        
         void m_calculatePhase();
-
         double m_randomDouble();
         void m_waveSwitch();
 
