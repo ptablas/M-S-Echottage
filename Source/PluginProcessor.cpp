@@ -258,13 +258,10 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                xMidRaw *= 0.5;
                xSideRaw *= 0.5;
 
-
                // Filtering
 
                const float xMidFilt = MidFilterModule.processSample(0, xMidRaw);
                const float xSideFilt = SideFilterModule.processSample(0, xSideRaw);
-
-               // Delay
 
                //LFO Phase Calculation <- needed for LFOs
 
@@ -274,26 +271,26 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
 
                Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
-               Time_Mid = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
+               Time_Mid =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
 
-                    //Mid
+               //Mid Delay
                 
                float dry = xMidFilt;                                                // We take the filtered signal
                float wet = MidDelayModule.popSample(0, Time_Mid);                   // Extract a delayed sample (read)
                MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Introduce a Sample into the delay module (write) - reintroducing the wet signal creates feedback
                float xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);              // Here the dry and wet signals are mixed
 
-                    //Side
+               //Side Delay
 
-                dry = xSideFilt;
-                wet = SideDelayModule.popSample(0, Time_Side);
-                SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
-                float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
+               dry = xSideFilt;
+               wet = SideDelayModule.popSample(0, Time_Side);
+               SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
+               float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
 
-                // Output Handling
+               // Output Handling
 
-                if (Output_Type == "Stereo")
-                { 
+               if (Output_Type == "Stereo")
+               { 
 
                     // Decoding Back to Stereo
                     newLeft = xMid + xSide;                                                                 
@@ -324,12 +321,12 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                     channelDataRight[sample] = newRight;
                     }
                     
-                }
-                else // output == mid/side
-                {    // Channels Are Left in Mid and Side                                     
+               }
+               else // output == mid/side
+               {    // Channels Are Left in Mid and Right in Side                                     
                     channelDataLeft[sample] = xMid;
                     channelDataRight[sample] = xSide;
-                }
+               }
             }
      
     }
