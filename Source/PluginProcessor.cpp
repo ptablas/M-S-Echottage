@@ -233,30 +233,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             auto* channelDataRight = buffer.getWritePointer(1);
 
             for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
-            {               
-
-               // LFOs values from GUI
-
-               const auto LFO_Speed_Mid = LFO_Speed_Mid_Target.getNextValue();
-               const auto LFO_Speed_Side = LFO_Speed_Side_Target.getNextValue();
-               const auto LFO_Depth_Mid = LFO_Depth_Mid_Target.getNextValue();
-               const auto LFO_Depth_Side = LFO_Depth_Side_Target.getNextValue();
-                
-               //LFO Phase Calculation <- needed for LFOs
-                   
-               lfoValueMid = lfoMid.output(LFO_Speed_Mid, LFO_Depth_Mid);
-               lfoValueSide = lfoSide.output(LFO_Speed_Side, LFO_Depth_Side);
-
-               //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
-
-               Time_Side =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
-               Time_Mid =   [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
-               
-               // Delay values are finally updated
-
-               SideDelayModule.setDelay(Time_Side);
-               MidDelayModule.setDelay(Time_Mid);
-
+            {                                           
                         
                // Mid/Side encoding and Stereo Widening 
 
@@ -288,6 +265,16 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                const float xSideFilt = SideFilterModule.processSample(0, xSideRaw);
 
                // Delay
+
+               //LFO Phase Calculation <- needed for LFOs
+
+               lfoValueMid = lfoMid.output(LFO_Speed_Mid_Target.getNextValue(), LFO_Depth_Mid_Target.getNextValue());
+               lfoValueSide = lfoSide.output(LFO_Speed_Side_Target.getNextValue(), LFO_Depth_Side_Target.getNextValue());
+
+               //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
+
+               Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
+               Time_Mid = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
 
                     //Mid
                 
