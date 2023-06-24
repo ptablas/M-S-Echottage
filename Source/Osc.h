@@ -32,7 +32,7 @@ class Osc
 
 private:
 
-        double m_sampleRate;
+        static double m_sampleRate;
         double m_phase, m_speed, m_depth, m_out;
         Waveform m_waveform;
         bool m_sampler = 0;
@@ -44,26 +44,32 @@ private:
     public:
         
         Osc()
-            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Sine), m_sampleRate(0)
+            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Sine)
         {
+            m_sampleRate = 0;
         }
 
         Osc(double sR)
-            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Sine), m_sampleRate(sR)
+            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Sine)
         {
+            m_sampleRate = sR;
         }
 
         Osc(Waveform waveform)
-            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(waveform), m_sampleRate(0)
+            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(waveform)
         {
+            m_sampleRate = 0;
         }
 
         Osc(double sR, Waveform waveform)
-            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(waveform), m_sampleRate(sR)
+            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(waveform)
         {
+            m_sampleRate = sR;
         }
  
         void prepare(double sR);
+
+        void prepare(const juce::dsp::ProcessSpec& spec);
         
         void setWaveform(Waveform waveform);
 

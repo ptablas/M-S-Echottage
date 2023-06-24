@@ -159,8 +159,8 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
     // LFO initialization
 
-    lfoMid.prepare(sampleRate);
-    lfoSide.prepare(sampleRate);
+    lfoMid.prepare(spec);
+  //  lfoSide.prepare(spec);
 
     lfoMid.setWaveform(Osc::Random);
     lfoSide.setWaveform(Osc::SH);
@@ -237,20 +237,18 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
             for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
             {                                           
-                        
-               // Mid/Side encoding and Stereo Widening 
-
+               
+               // Input Selection
+                                
                Width = Width_Target.getNextValue(); // gets value from ramp
-
-               if (Input_Type == "Stereo")
+                                                        
+               if (Input_Type == "Stereo") // Mid/Side encoding and Stereo Widening   
                {
                    xMidRaw = (2 - Width) * (channelDataLeft[sample] + channelDataRight[sample]);
                    xSideRaw = Width * (channelDataLeft[sample] - channelDataRight[sample]);
-               }
+               }               
 
-               // Or Simply Mid/Side Mixer if input is Mid/Side
-
-               else
+               else   // Or Simply Mid/Side Mixer if input is Mid/Side
                {
                    xMidRaw = channelDataLeft[sample] * (2 - Width);
                    xSideRaw = channelDataRight[sample] * (Width);
@@ -278,10 +276,10 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                //Mid Delay
                 
-               float dry = xMidFilt;                                                // We take the filtered signal
-               float wet = MidDelayModule.popSample(0, Time_Mid);                   // Extract a delayed sample (read)
-               MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Introduce a Sample into the delay module (write) - reintroducing the wet signal creates feedback
-               float xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);              // Here the dry and wet signals are mixed
+               float dry = xMidFilt;                                                
+               float wet = MidDelayModule.popSample(0, Time_Mid);                   // Read a delayed sample
+               MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Write a sample into buffer + feedback
+               float xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);              // Dry + Wet signals
 
                //Side Delay
 
@@ -294,12 +292,10 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                if (Output_Type == "Stereo")
                { 
-
-                    // Decoding Back to Stereo
+                    
                     newLeft = xMid + xSide;                                                                 
                     newRight = xMid - xSide;
 
-                    // Pass decoded samples to channels
 
                     if (Input_Type == "Stereo") // If Stereo i/o -> Volume control
                     {

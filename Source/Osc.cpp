@@ -10,10 +10,17 @@
 
 #include "Osc.h"
 
+double Osc::m_sampleRate;
 
 void Osc::prepare(double sR)
 {
     m_sampleRate = sR;
+}
+
+void Osc::prepare(const juce::dsp::ProcessSpec& spec)
+{
+    jassert(spec.sampleRate > 0);
+    m_sampleRate = spec.sampleRate;
 }
 
 void Osc::setWaveform(Waveform waveform)
