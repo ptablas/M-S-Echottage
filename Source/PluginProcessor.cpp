@@ -47,16 +47,16 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
                             
                 //Mid
            std::make_unique<juce::AudioParameterFloat>("sendmid", "SendMid", 0.f, 1.f, 0.f), //controls dry/wet of signal
-           std::make_unique<juce::AudioParameterFloat>("timemid", "TimeMid", 0.f, 2000.f, 0.f), // Delay time in samples
+           std::make_unique<juce::AudioParameterFloat>("timemid", "TimeMid", 0.f, 20000.f, 0.f), // Delay time in samples
            std::make_unique<juce::AudioParameterFloat>("lfospeedmid", "LFOSpeedMid", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f), //in Hertz
-           std::make_unique<juce::AudioParameterFloat>("lfodepthmid", "LFODepthMid", juce::NormalisableRange<float> {0.f, 2000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in samples (since it modulates time) Again skew factor
+           std::make_unique<juce::AudioParameterFloat>("lfodepthmid", "LFODepthMid", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in samples (since it modulates time) Again skew factor
            std::make_unique<juce::AudioParameterFloat>("feedbackmid", "FeedbackMid", 0.f, 0.9f, 0.0001f),
 
                 //Side
            std::make_unique<juce::AudioParameterFloat>("sendside", "SendSide", 0.f, 1.f, 0.f),
-           std::make_unique<juce::AudioParameterFloat>("timeside", "TimeSide", 0.f, 2000.f, 0.f), // In samples
+           std::make_unique<juce::AudioParameterFloat>("timeside", "TimeSide", 0.f, 20000.f, 0.f), // In samples
            std::make_unique<juce::AudioParameterFloat>("lfospeedside", "LFOSpeedSide", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f),
-           std::make_unique<juce::AudioParameterFloat>("lfodepthside", "LFODepthSide", juce::NormalisableRange<float> {0.f, 2000.f / 2.f, 0.0001f, 0.6f}, 0.f),
+           std::make_unique<juce::AudioParameterFloat>("lfodepthside", "LFODepthSide", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f),
            std::make_unique<juce::AudioParameterFloat>("feedbackside", "FeedbackSide", 0.f, 0.9f, 0.0001f),
                            })
 #endif
@@ -160,10 +160,10 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     // LFO initialization
 
     lfoMid.prepare(spec);
-  //  lfoSide.prepare(spec);
+    lfoSide.prepare(spec);
 
-    lfoMid.setWaveform(Osc::Random);
-    lfoSide.setWaveform(Osc::SH);
+    //lfoMid.setWaveform(Osc::Random);
+    //lfoSide.setWaveform(Osc::SH);
 
     // Delay Modules Initializiation                    << Delays here and so on...
 

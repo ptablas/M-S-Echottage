@@ -109,7 +109,7 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     timemidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "timemid", timemidDial);
     timemidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    timemidDial.setRange(0.f, 2000.f, 0.0001f);
+    timemidDial.setRange(0.f, 20000.f, 0.0001f);
     timemidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&timemidDial);
 
@@ -125,7 +125,7 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     lfodepthmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "lfodepthmid", lfodepthmidDial);
     lfodepthmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    lfodepthmidDial.setRange(0.f, 2000.f / 2.f, 0.0001f);
+    lfodepthmidDial.setRange(0.f, 20000.f / 2.f, 0.0001f);
     lfodepthmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&lfodepthmidDial);
 
@@ -151,7 +151,7 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     timesideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "timeside", timesideDial);
     timesideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    timesideDial.setRange(0.f, 2000.f, 0.0001f);
+    timesideDial.setRange(0.f, 20000.f, 0.0001f);
     timesideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&timesideDial);
 
@@ -167,7 +167,7 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     lfodepthsideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "lfodepthside", lfodepthsideDial);
     lfodepthsideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    lfodepthsideDial.setRange(0.f, 2000.f / 2.f, 0.0001f);
+    lfodepthsideDial.setRange(0.f, 20000.f / 2.f, 0.0001f);
     lfodepthsideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&lfodepthsideDial);
 

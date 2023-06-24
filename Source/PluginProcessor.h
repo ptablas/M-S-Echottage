@@ -90,8 +90,8 @@ private:
 
     // Initialize Delay         Lagrange3rd is a high-quality interpolation <-> 3000 is longest num. of samples of delay tap
 
-    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> MidDelayModule{3000};
-    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> SideDelayModule{3000};
+    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> MidDelayModule{30000};
+    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> SideDelayModule{30000};
 
     double Send_Mid = 0.f;
     juce::SmoothedValue<double> Time_Mid_Target = 0.f;
