@@ -1,5 +1,5 @@
 /*
-  ==============================================================================
+  ===============================CPP============================================
 
   Author: Pablo Tablas
 
@@ -14,6 +14,10 @@
   Osc is JUCE-compatible. If being used in a JUCE program, sample rate can
   potentially be initialized appropriately by passing the juce::dsp::ProcessSpec
   spec onto the prepare function.
+
+  The member variable m_sampleRate is, however, shared among all instances of the
+  class. Meaning the sample rate needs to be passed only to one instance of it.
+  Declaring it again will not results in more errors, but'll take unnecessary space.
   
   ==============================================================================
 */
@@ -27,7 +31,7 @@ void Osc::prepare(double sR)
     m_sampleRate = sR;
 }
 
-#ifndef JUCE_HEADER_INCLUDED
+#ifdef JUCE_HEADER_INCLUDED
 void Osc::prepare(const juce::dsp::ProcessSpec& spec)
 {
     jassert(spec.sampleRate > 0);

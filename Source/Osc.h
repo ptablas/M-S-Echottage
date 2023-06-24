@@ -1,5 +1,5 @@
 /*
-  ==============================================================================
+  ===============================HEADER=========================================
 
   Author: Pablo Tablas
 
@@ -11,9 +11,21 @@
   Bela's Andrew McPherson's "C++ Real-Time Audio Programming with Bela" Series.
   Their example is here simply extrapolated to cover most basic waveforms.
 
-  Osc is JUCE-compatible. If being used in a JUCE program, sample rate can
+  Osc is JUCE-compatible. If being used within the JUCE framework, sample rate can
   potentially be initialized appropriately by passing the juce::dsp::ProcessSpec
   spec onto the prepare function.
+  
+*/
+
+
+// COMMENT THIS LINE IF NOT being used within the JUCE framework
+#define JUCE_HEADER_INCLUDED 
+
+/*
+
+  The member variable m_sampleRate is, however, shared among all instances of the
+  class. Meaning the sample rate needs to be passed only to one instance of it.
+  Declaring it again will not results in more errors, but'll take unnecessary space.
 
   ==============================================================================
 */
@@ -24,9 +36,9 @@
 #include <cmath>
 #include <random>
 
-#ifndef JUCE_HEADER_INCLUDED
+#ifdef JUCE_HEADER_INCLUDED
 #include <JuceHeader.h>
-#endif
+#endif  
 
 
 class Osc
@@ -82,7 +94,7 @@ private:
  
         void prepare(double sR);
 
-        #ifndef JUCE_HEADER_INCLUDED
+        #ifdef JUCE_HEADER_INCLUDED
         void prepare(const juce::dsp::ProcessSpec& spec);
         #endif  
         
