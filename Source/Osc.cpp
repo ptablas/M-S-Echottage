@@ -1,10 +1,20 @@
 /*
   ==============================================================================
 
-    Osc.cpp
-    Created: 30 May 2023 2:15:36pm
-    Author:  pablo
+  Author: Pablo Tablas
 
+  Osc is an oscillator class containing a variety of waveforms (Sine, Triangle,
+  Sawtooth, Square and Random), apart from Sample & Hold capabilities by sampling
+  said Random waveform.
+
+  Computation of oscillator values in relation to phase is heavily influenced by 
+  Bela's Andrew McPherson's "C++ Real-Time Audio Programming with Bela" Series. 
+  Their example is here simply extrapolated to cover most basic waveforms.
+
+  Osc is JUCE-compatible. If being used in a JUCE program, sample rate can
+  potentially be initialized appropriately by passing the juce::dsp::ProcessSpec
+  spec onto the prepare function.
+  
   ==============================================================================
 */
 
@@ -17,11 +27,13 @@ void Osc::prepare(double sR)
     m_sampleRate = sR;
 }
 
+#ifndef JUCE_HEADER_INCLUDED
 void Osc::prepare(const juce::dsp::ProcessSpec& spec)
 {
     jassert(spec.sampleRate > 0);
     m_sampleRate = spec.sampleRate;
 }
+#endif
 
 void Osc::setWaveform(Waveform waveform)
 {
@@ -52,14 +64,10 @@ void Osc::m_waveSwitch()
     case Triangle:
 
         if (m_phase > 0)
-        {
             m_out = -1 + (2 * m_phase / M_PI);
-        }
 
         else
-        {
             m_out = -1 - (2 * m_phase / M_PI);
-        }
 
         break;
 
@@ -72,14 +80,10 @@ void Osc::m_waveSwitch()
     case Square:
 
         if (m_phase > 0)
-        {
             m_out = 1;
-        }
 
         else
-        {
             m_out = -1;
-        }
 
         break;
 
@@ -94,7 +98,6 @@ void Osc::m_waveSwitch()
         if (m_sampler == 1)
         {
             m_out = m_randomDouble();
-
             m_sampler = 0;
         }
 

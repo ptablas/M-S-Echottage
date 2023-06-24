@@ -1,9 +1,19 @@
 /*
   ==============================================================================
 
-    Osc.h
-    Created: 30 May 2023 2:15:35pm
-    Author:  pablo
+  Author: Pablo Tablas
+
+  Osc is an oscillator class containing a variety of waveforms (Sine, Triangle,
+  Sawtooth, Square and Random), apart from Sample & Hold capabilities by sampling
+  said Random waveform.
+
+  Computation of oscillator values in relation to phase is heavily influenced by
+  Bela's Andrew McPherson's "C++ Real-Time Audio Programming with Bela" Series.
+  Their example is here simply extrapolated to cover most basic waveforms.
+
+  Osc is JUCE-compatible. If being used in a JUCE program, sample rate can
+  potentially be initialized appropriately by passing the juce::dsp::ProcessSpec
+  spec onto the prepare function.
 
   ==============================================================================
 */
@@ -13,7 +23,10 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <random>
+
+#ifndef JUCE_HEADER_INCLUDED
 #include <JuceHeader.h>
+#endif
 
 
 class Osc
@@ -69,7 +82,9 @@ private:
  
         void prepare(double sR);
 
+        #ifndef JUCE_HEADER_INCLUDED
         void prepare(const juce::dsp::ProcessSpec& spec);
+        #endif  
         
         void setWaveform(Waveform waveform);
 
