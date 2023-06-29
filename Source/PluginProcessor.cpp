@@ -221,6 +221,53 @@ bool MSUtilityAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 }
 #endif
 
+void MSUtilityAudioProcessor::Mid_Processing()
+{
+    // Filtering
+
+    const float xMidFilt = MidFilterModule.processSample(0, xMidRaw);
+
+    //LFO Phase Calculation <- needed for LFOs
+
+    lfoValueMid = lfoMid.output(LFO_Speed_Mid_Target.getNextValue(), LFO_Depth_Mid_Target.getNextValue());
+
+    //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
+
+    Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
+
+    //Mid Delay
+
+    float dry = xMidFilt;
+    float wet = MidDelayModule.popSample(0, Time_Mid);                   // Read a delayed sample
+    MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Write a sample into buffer + feedback
+    xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);                    // Dry + Wet signals
+}
+
+void MSUtilityAudioProcessor::Side_Processing()
+{
+    // Filtering
+
+    const float xSideFilt = SideFilterModule.processSample(0, xSideRaw);
+
+    //LFO Phase Calculation <- needed for LFOs
+
+    lfoValueSide = lfoSide.output(LFO_Speed_Side_Target.getNextValue(), LFO_Depth_Side_Target.getNextValue());
+
+    //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
+
+    Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
+
+    //Side Delay
+
+    float dry = xSideFilt;
+    float wet = SideDelayModule.popSample(0, Time_Side);
+    SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
+    xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
+}
+
+
+
+
 void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
@@ -259,7 +306,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                xMidRaw *= 0.5;
                xSideRaw *= 0.5;
 
-               // Filtering
+               /*// Filtering
 
                const float xMidFilt = MidFilterModule.processSample(0, xMidRaw);
                const float xSideFilt = SideFilterModule.processSample(0, xSideRaw);
@@ -286,7 +333,15 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                dry = xSideFilt;
                wet = SideDelayModule.popSample(0, Time_Side);
                SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
-               float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
+               float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);*/
+
+               std::thread MidWorker(std::bind(&MSUtilityAudioProcessor::Mid_Processing, this));
+               std::thread SideWorker(std::bind(&MSUtilityAudioProcessor::Side_Processing, this));
+
+               MidWorker.join();
+               SideWorker.join();
+
+               float test_mid(xMid), test_side(xSide);
 
                // Output Handling
 

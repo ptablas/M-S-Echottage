@@ -30,6 +30,9 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
+    void Mid_Processing();
+    void Side_Processing();
+
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     //==============================================================================
@@ -63,6 +66,9 @@ private:
 
 
     // Initialization of Variables for parameterChanged (ultimately for processing block)
+
+    float xMid = 0.f;
+    float xSide = 0.f;
 
     // Width
 
