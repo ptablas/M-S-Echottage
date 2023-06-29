@@ -32,20 +32,20 @@ public:
 
 
 
-    class Mid_Thread : public juce::Thread
-    {
-    public:
-        Mid_Thread() : juce::Thread("MID PROCESSING THREAD")
-        {
+    //class Mid_Thread : public juce::Thread
+    //{
+    //public:
+    //    Mid_Thread() : juce::Thread("MID PROCESSING THREAD")
+    //    {
 
-        }
+    //    }
 
-        void run() override
-        {
-            Mid_Processing();
-            signalThreadShouldExit();
-        }
-    };
+    //    void run() override
+    //    {
+    //        Mid_Processing();
+    //        signalThreadShouldExit();
+    //    }
+    //};
 
 
     class Side_Thread : public juce::Thread
@@ -54,7 +54,7 @@ public:
         Side_Thread(MSUtilityAudioProcessor& processor) : juce::Thread("SIDE PROCESSING THREAD"),
                                                           processorRef(processor)
         {
-
+        
         }
 
         void run() override
@@ -128,9 +128,6 @@ private:
 
     // Initialize Threads
 
-
-    MSUtilityAudioProcessor processor;
-
     Mid_Thread mid_Thread;
     Side_Thread side_Thread;
 
@@ -138,16 +135,14 @@ private:
 
     // Initialize Filters
 
-    juce::dsp::StateVariableTPTFilter<float> MidFilterModule; 
-    juce::dsp::StateVariableTPTFilter<float> SideFilterModule;
+
 
     float Cut_Off_Mid;
     float Cut_Off_Side;
 
     // Initialize Delay         Lagrange3rd is a high-quality interpolation <-> 3000 is longest num. of samples of delay tap
 
-    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> MidDelayModule{30000};
-    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> SideDelayModule{30000};
+
 
     double Send_Mid = 0.f;
     juce::SmoothedValue<double> Time_Mid_Target = 0.f;
@@ -172,6 +167,13 @@ private:
 
     juce::SmoothedValue<double> LFO_Speed_Side_Target = 0;
     juce::SmoothedValue<double> LFO_Depth_Side_Target = 0;
+
+protected:
+
+    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> MidDelayModule{ 30000 };
+    juce::dsp::DelayLine<double, juce::dsp::DelayLineInterpolationTypes::Lagrange3rd> SideDelayModule{30000};
+    juce::dsp::StateVariableTPTFilter<float> MidFilterModule;
+    juce::dsp::StateVariableTPTFilter<float> SideFilterModule;
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MSUtilityAudioProcessor)
