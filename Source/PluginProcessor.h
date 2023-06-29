@@ -30,6 +30,8 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
+
+
     class Mid_Thread : public juce::Thread
     {
     public:
@@ -38,34 +40,38 @@ public:
 
         }
 
-
-
         void run() override
         {
-            void Mid_Processing();
+            Mid_Processing();
             signalThreadShouldExit();
         }
-
     };
+
+
     class Side_Thread : public juce::Thread
     {
     public:
-        Side_Thread() : juce::Thread("SIDE PROCESSING THREAD")
+        Side_Thread(MSUtilityAudioProcessor& processor) : juce::Thread("SIDE PROCESSING THREAD"),
+                                                          processorRef(processor)
         {
 
         }
 
         void run() override
         {
-            void Side_Processing();
+            Side_Processing();
             signalThreadShouldExit();
         }
+
+    private:
+
+        MSUtilityAudioProcessor& processorRef;
+        void Side_Processing();
 
     };
 
     
     void Mid_Processing();
-    void Side_Processing();
 
     void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
@@ -122,8 +128,13 @@ private:
 
     // Initialize Threads
 
+
+    MSUtilityAudioProcessor processor;
+
     Mid_Thread mid_Thread;
     Side_Thread side_Thread;
+
+
 
     // Initialize Filters
 

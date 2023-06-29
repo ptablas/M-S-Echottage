@@ -8,7 +8,6 @@
 
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
-
 #include "Osc.h"
 
 //==============================================================================
@@ -240,7 +239,7 @@ void MSUtilityAudioProcessor::Mid_Processing()
     xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);                    // 3. Mix (Dry + Wet) signals
 }
 
-void MSUtilityAudioProcessor::Side_Processing()
+void MSUtilityAudioProcessor::Side_Thread::Side_Processing()
 {
     // Filtering
 
