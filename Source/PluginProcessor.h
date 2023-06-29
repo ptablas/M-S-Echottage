@@ -30,6 +30,40 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
+    class Mid_Thread : public juce::Thread
+    {
+    public:
+        Mid_Thread() : juce::Thread("MID PROCESSING THREAD")
+        {
+
+        }
+
+
+
+        void run() override
+        {
+            void Mid_Processing();
+            signalThreadShouldExit();
+        }
+
+    };
+    class Side_Thread : public juce::Thread
+    {
+    public:
+        Side_Thread() : juce::Thread("SIDE PROCESSING THREAD")
+        {
+
+        }
+
+        void run() override
+        {
+            void Side_Processing();
+            signalThreadShouldExit();
+        }
+
+    };
+
+    
     void Mid_Processing();
     void Side_Processing();
 
@@ -85,6 +119,11 @@ private:
     float newLeft = 0;
     float newRight = 0;
 
+
+    // Initialize Threads
+
+    Mid_Thread mid_Thread;
+    Side_Thread side_Thread;
 
     // Initialize Filters
 

@@ -142,9 +142,6 @@ void MSUtilityAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    
-
-
     juce::dsp::ProcessSpec spec;                     // Here we create the processSpec type spec variable, 
     spec.maximumBlockSize = samplesPerBlock;         // which holds samples per block of audio, 
     spec.sampleRate = sampleRate;                    // sample rate and number of outputs to be passed to
@@ -193,8 +190,8 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
 void MSUtilityAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
+    side_Thread.stopThread(0);
+    mid_Thread.stopThread(0);
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -238,9 +235,9 @@ void MSUtilityAudioProcessor::Mid_Processing()
     //Mid Delay
 
     float dry = xMidFilt;
-    float wet = MidDelayModule.popSample(0, Time_Mid);                   // Read a delayed sample
-    MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Write a sample into buffer + feedback
-    xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);                    // Dry + Wet signals
+    float wet = MidDelayModule.popSample(0, Time_Mid);                   // 1. Read a delayed sample
+    MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // 2. Write a sample into buffer + feedback
+    xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);                    // 3. Mix (Dry + Wet) signals
 }
 
 void MSUtilityAudioProcessor::Side_Processing()
@@ -265,9 +262,6 @@ void MSUtilityAudioProcessor::Side_Processing()
     xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
 }
 
-
-
-
 void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
@@ -285,6 +279,9 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
             for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
             {                                           
                
+                bool midrun = mid_Thread.isThreadRunning();
+                
+
                // Input Selection
                                 
                Width = Width_Target.getNextValue(); // gets value from ramp
@@ -335,11 +332,8 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
                float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);*/
 
-               std::thread MidWorker(std::bind(&MSUtilityAudioProcessor::Mid_Processing, this));
-               std::thread SideWorker(std::bind(&MSUtilityAudioProcessor::Side_Processing, this));
-
-               MidWorker.join();
-               SideWorker.join();
+               mid_Thread.startThread();
+               side_Thread.startThread();
 
                float test_mid(xMid), test_side(xSide);
 
