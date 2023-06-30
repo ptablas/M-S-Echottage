@@ -30,23 +30,50 @@ public:
     bool isBusesLayoutSupported (const BusesLayout& layouts) const override;
    #endif
 
+    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
+
+    //==============================================================================
+
     class Mid_Thread : public juce::Thread
     {
     public:
-        Mid_Thread() : juce::Thread("MID PROCESSING THREAD")
+        Mid_Thread() : juce::Thread("MID PROCESSING THREAD"),
+                       processor(nullptr)
         {
 
         }
 
-
+        void prepare(MSUtilityAudioProcessor* processor)
+        {
+            this->processor = processor;
+        }
 
         void run() override
         {
-            void Mid_Processing();
-            signalThreadShouldExit();
+            while (!threadShouldExit() && !shouldExit)
+            {
+                if (processor != nullptr)
+                {
+                    processor->Mid_Processing();
+                }
+            }
         }
 
+        void signalShouldExit()
+        {
+            shouldExit = true;
+        }
+
+        void signalShouldContinue()
+        {
+            shouldExit = false;
+        }
+
+    private:
+        MSUtilityAudioProcessor* processor;
+        std::atomic<bool> shouldExit;
     };
+
     class Side_Thread : public juce::Thread
     {
     public:
@@ -63,11 +90,8 @@ public:
 
     };
 
-    
     void Mid_Processing();
     void Side_Processing();
-
-    void processBlock (juce::AudioBuffer<float>&, juce::MidiBuffer&) override;
 
     //==============================================================================
     juce::AudioProcessorEditor* createEditor() override;
@@ -121,6 +145,7 @@ private:
 
 
     // Initialize Threads
+
 
     Mid_Thread mid_Thread;
     Side_Thread side_Thread;

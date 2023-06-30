@@ -169,6 +169,11 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     MidDelayModule.prepare(spec);
     SideDelayModule.prepare(spec);
 
+    // Threads Initialization
+
+    mid_Thread.prepare(this);
+    
+
 
     //SmoothedValues -> Creates linear interpolation in parameter changes.
     
@@ -262,12 +267,13 @@ void MSUtilityAudioProcessor::Side_Processing()
     xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
 }
 
+
+
 void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-    double sampeleratero = getSampleRate();
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) // Clears channels from trash data
         buffer.clear (i, 0, buffer.getNumSamples());
@@ -278,7 +284,9 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
             for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
             {                                           
-               
+                
+
+
                 bool midrun = mid_Thread.isThreadRunning();
                 
 
@@ -332,10 +340,13 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
                float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);*/
 
+               
                mid_Thread.startThread();
+               mid_Thread.signalShouldExit();
+
                side_Thread.startThread();
 
-               float test_mid(xMid), test_side(xSide);
+               
 
                // Output Handling
 
@@ -379,6 +390,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
      
     }
 }
+
 
 //==============================================================================
 bool MSUtilityAudioProcessor::hasEditor() const
