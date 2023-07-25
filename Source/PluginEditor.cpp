@@ -257,7 +257,7 @@ void MSUtilityAudioProcessorEditor::paint (juce::Graphics& g)
     g.setFont(juce::Font("Times New Roman", 30.f, juce::Font::italic));
     g.fillCheckerBoard(titleBoard, 10, 10, juce::Colours::rosybrown, juce::Colours::sandybrown);
     g.drawRoundedRectangle(boxXmid, 10, 262, 37, linencornersize, linenlinewidth);
-    g.drawFittedText("M/S echo-ttage", 25, 20, letterWidth, 10, juce::Justification::centred, 1, 0.0f);
+    g.drawFittedText("M/S echo-ttage", 25, 22.5, letterWidth, 10, juce::Justification::centred, 1, 0.0f);
     
 
     g.setColour(juce::Colours::saddlebrown);
@@ -374,10 +374,10 @@ void MSUtilityAudioProcessorEditor::resized()
     cutoffmidDial.setBounds(dialXmid, 136, dialWidth, dialHeight);
     cutoffmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-    resonancemidDial.setBounds(30, 140, 20, 75);
+    resonancemidDial.setBounds(112.5, 140, 20, 75);
     resonancemidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-    modemidSel.setBounds(115, 140, 20, 20);
+    modemidSel.setBounds(25, 140, 20, 20);
 
         //Side
     cutoffsideDial.setBounds(dialXside, 136, dialWidth, dialHeight);
@@ -403,7 +403,7 @@ void MSUtilityAudioProcessorEditor::resized()
     lfodepthmidDial.setBounds(dialXmid, 440, dialWidth, dialHeight);
     lfodepthmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-    waveformmidSel.setBounds(32.5, 380, 20, 20);
+    waveformmidSel.setBounds(110, 380, 20, 20);
 
     feedbackmidDial.setBounds(dialXmid, 510, dialWidth, dialHeight);
     feedbackmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
