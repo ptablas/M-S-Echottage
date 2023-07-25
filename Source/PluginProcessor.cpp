@@ -49,7 +49,8 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
            std::make_unique<juce::AudioParameterFloat>("sendmid", "SendMid", 0.f, 1.f, 0.f), //controls dry/wet of signal
            std::make_unique<juce::AudioParameterFloat>("timemid", "TimeMid", 0.f, 20000.f, 0.f), // Delay time in samples
            std::make_unique<juce::AudioParameterFloat>("lfospeedmid", "LFOSpeedMid", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f), //in Hertz
-           std::make_unique<juce::AudioParameterFloat>("lfodepthmid", "LFODepthMid", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in samples (since it modulates time) Again skew factor
+           std::make_unique<juce::AudioParameterFloat>("lfodepthmid", "LFODepthMid", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in miliseconds (since it modulates time) Again skew factor
+           std::make_unique<juce::AudioParameterChoice>("waveformmid", "WaveformMid", juce::StringArray("Sine", "Triangle", "Sawtooth", "Square", "Random", "Sample & Hold"), 0),
            std::make_unique<juce::AudioParameterFloat>("feedbackmid", "FeedbackMid", 0.f, 0.9f, 0.0001f),
 
                 //Side
@@ -57,6 +58,7 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
            std::make_unique<juce::AudioParameterFloat>("timeside", "TimeSide", 0.f, 20000.f, 0.f), // In samples
            std::make_unique<juce::AudioParameterFloat>("lfospeedside", "LFOSpeedSide", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f),
            std::make_unique<juce::AudioParameterFloat>("lfodepthside", "LFODepthSide", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f),
+           std::make_unique<juce::AudioParameterChoice>("waveformside", "WaveformSide", juce::StringArray("Sine", "Triangle", "Sawtooth", "Square", "Random", "Sample & Hold"), 0),
            std::make_unique<juce::AudioParameterFloat>("feedbackside", "FeedbackSide", 0.f, 0.9f, 0.0001f),
                            })
 #endif
@@ -64,9 +66,9 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
     const juce::StringArray params = { "stereowidth", "input", "output", //Width Section
                                        "cutoffmid", "resonancemid", "modemid", //Filter Section -> Mid
                                        "cutoffside", "resonanceside", "modeside", //Filter Section -> Side
-                                       "sendmid", "timemid", "lfospeedmid", "lfodepthmid", "feedbackmid", //Delay section -> Mid
-                                       "sendside", "timeside", "lfospeedside", "lfodepthside", "feedbackside" };//Delay section -> Side
-    for (int i = 0; i <= 19; i++)
+                                       "sendmid", "timemid", "lfospeedmid", "lfodepthmid", "waveformmid", "feedbackmid", //Delay section -> Mid
+                                       "sendside", "timeside", "lfospeedside", "lfodepthside", "waveformside","feedbackside"};//Delay section -> Side
+    for (int i = 0; i <= 21; i++)
     {
         //adds a listener to each parameter in the array.
         treeState.addParameterListener(params[i], this);
@@ -481,8 +483,6 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
                                       
         Time_Mid_Target.setTargetValue(newValue);
 
-      //  Time_Mid = newValue;
-      //  MidDelayModule.setDelay(newValue);
     }
     else if (parameterID == "lfospeedmid")
     {
@@ -492,6 +492,29 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
     {
         LFO_Depth_Mid_Target.setTargetValue(newValue);
     }
+
+    else if (parameterID == "waveformmid")
+    {
+        switch ((int)newValue)
+        {
+        case 0:
+            lfoMid.setWaveform(Osc::Waveform::Sine);
+            break;
+        case 1:
+            lfoMid.setWaveform(Osc::Waveform::Triangle);
+            break;
+        case 2:
+            lfoMid.setWaveform(Osc::Waveform::Sawtooth);
+            break;
+        case 4:
+            lfoMid.setWaveform(Osc::Waveform::Random);
+            break;
+        case 5:
+            lfoMid.setWaveform(Osc::Waveform::SH);
+            break;
+        }
+    }
+
     else if (parameterID == "feedbackmid")
     {
         Feedback_Mid = newValue;
@@ -514,6 +537,29 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
     {
         LFO_Depth_Side_Target.setTargetValue(newValue);
     }
+
+    else if (parameterID == "waveformside")
+    {
+        switch ((int)newValue)
+        {
+        case 0:
+            lfoSide.setWaveform(Osc::Waveform::Sine);
+            break;
+        case 1:
+            lfoSide.setWaveform(Osc::Waveform::Triangle);
+            break;
+        case 2:
+            lfoSide.setWaveform(Osc::Waveform::Sawtooth);
+            break;
+        case 4:
+            lfoSide.setWaveform(Osc::Waveform::Random);
+            break;
+        case 5:
+            lfoSide.setWaveform(Osc::Waveform::SH);
+            break;
+        }
+    }
+
     else if (parameterID == "feedbackside")
     {
         Feedback_Side = newValue;

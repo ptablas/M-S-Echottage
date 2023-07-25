@@ -53,6 +53,7 @@ private:
     juce::Slider timemidDial;
     juce::Slider lfospeedmidDial;
     juce::Slider lfodepthmidDial;
+    juce::ComboBox waveformmidSel;
     juce::Slider feedbackmidDial;
 
             //Side
@@ -60,6 +61,7 @@ private:
     juce::Slider timesideDial;
     juce::Slider lfospeedsideDial;
     juce::Slider lfodepthsideDial;
+    juce::ComboBox waveformsideSel;
     juce::Slider feedbacksideDial;
 
     //Values                            <- Values for treeState
@@ -89,6 +91,7 @@ private:
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> timemidValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> lfospeedmidValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> lfodepthmidValue;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformmidChoice;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> feedbackmidValue;
 
             //Side
@@ -96,6 +99,7 @@ private:
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> timesideValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> lfospeedsideValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> lfodepthsideValue;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformsideChoice;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> feedbacksideValue;
 
     MSUtilityAudioProcessor& audioProcessor;

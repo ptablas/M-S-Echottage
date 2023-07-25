@@ -129,6 +129,16 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     lfodepthmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&lfodepthmidDial);
 
+            // Waveform Type Choice&Sel
+    waveformmidSel.addItem("Sine", 1);
+    waveformmidSel.addItem("Triangle", 2);
+    waveformmidSel.addItem("Sawtooth", 3);
+    waveformmidSel.addItem("Square", 4);
+    waveformmidSel.addItem("Random", 5);
+    waveformmidSel.addItem("Sample & Hold", 6);
+    waveformmidChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "waveformmid", waveformmidSel);
+    addAndMakeVisible(&waveformmidSel);
+
             // feedbackDial&Value
     feedbackmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
         (treeState, "feedbackmid", feedbackmidDial);
@@ -170,6 +180,16 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
     lfodepthsideDial.setRange(0.f, 20000.f / 2.f, 0.0001f);
     lfodepthsideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
     addAndMakeVisible(&lfodepthsideDial);
+
+    // Waveform Type Choice&Sel
+    waveformsideSel.addItem("Sine", 1);
+    waveformsideSel.addItem("Triangle", 2);
+    waveformsideSel.addItem("Sawtooth", 3);
+    waveformsideSel.addItem("Square", 4);
+    waveformsideSel.addItem("Random", 5);
+    waveformsideSel.addItem("Sample & Hold", 6);
+    waveformsideChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "waveformside", waveformsideSel);
+    addAndMakeVisible(&waveformsideSel);
 
     // feedbackDial&Value
     feedbacksideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
@@ -383,6 +403,8 @@ void MSUtilityAudioProcessorEditor::resized()
     lfodepthmidDial.setBounds(dialXmid, 440, dialWidth, dialHeight);
     lfodepthmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
+    waveformmidSel.setBounds(32.5, 380, 20, 20);
+
     feedbackmidDial.setBounds(dialXmid, 510, dialWidth, dialHeight);
     feedbackmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
@@ -400,9 +422,8 @@ void MSUtilityAudioProcessorEditor::resized()
     lfodepthsideDial.setBounds(dialXside, 440, dialWidth, dialHeight);
     lfodepthsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
+    waveformsideSel.setBounds(252.5, 380, 20, 20);
+
     feedbacksideDial.setBounds(dialXside, 510, dialWidth, dialHeight);
     feedbacksideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-
-
 }
