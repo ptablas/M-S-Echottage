@@ -1,21 +1,17 @@
-# M/S Echo-ttage
+# M/S Echo-ttage.
 
-M/S Echo-ttage is a Mid/Side processing unit that features stereo widening and independent filter and variable-time delay through LFO capabilities per channel.
+M/S Echo-ttage is a Cross-platform VST3 audio plugin compatible with most Digital Audio Workstations (DAWs). It has been developed using the JUCE framework, given its extensive DSP library, GUI capabilities, and efficient API.
 
-This allows for seamless transitions between different popular DSP algorithms - from a simple delay to a flanger, phaser, chorus or extreme feedback soundscapes -, and everything in between, performed independently to the Mid or Side channels. This is performed through the use of an LFO per channel that modulates the delay time of the fractional delay.
+It splits an audio signal between the data that is common among left and right channels (Mid) and the data that is different, or in other words, is only on one of the stereo channels (Side). In addition, the now separated data can then be processed through a filter and a variable-time delay. Variable-Time Delays are the essence of many popular DSP algorithms, such as flangers, phasers, and choruses. By allowing time modulation to be user-definable, seamless transitions between different effects can be achieved. [More info here](https://github.com/ptablas/M-S-Echottage/wiki/Concept).
 
-**Check the Wiki for additional info regarding the concept and a guide of its functioning**
-https://github.com/ptablas/M-S-Echottage/wiki
+# Set-Up
+
+1. Download the "MS Echo-ttage.vst3" file above.
+2. Drag & Drop onto your DAW's VSTs folder.
+3. Within your DAW, scan for new plugins.
 
 # Acknowledgments
 
-Most of the code pertainign to the "Osc" class used for the LFOs is heavily based on the set of lectures *C++ Real-Time Audio Programming with Bela* by Andrew McPherson.
-
-# Libraries
-
-The JUCE library was extensively used for this project, which allowed for very quick GUI design and the use of already-made delay and filter classes.
-
- <img width="300" alt="echo-ttage" src="https://github.com/ptablas/M-S-Echottage/assets/125274411/ffc6b00d-6358-48b8-8456-dc3eaa80fe57"> 
-
+Most of the code pertaining to the "Osc" class used for the LFOs is heavily based on the set of lectures *C++ Real-Time Audio Programming with Bela* by Andrew McPherson.
 
 
