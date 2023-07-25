@@ -506,6 +506,9 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
         case 2:
             lfoMid.setWaveform(Osc::Waveform::Sawtooth);
             break;
+        case 3:
+            lfoMid.setWaveform(Osc::Waveform::Square);
+            break;
         case 4:
             lfoMid.setWaveform(Osc::Waveform::Random);
             break;
@@ -550,6 +553,9 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
             break;
         case 2:
             lfoSide.setWaveform(Osc::Waveform::Sawtooth);
+            break;
+        case 3:
+            lfoSide.setWaveform(Osc::Waveform::Square);
             break;
         case 4:
             lfoSide.setWaveform(Osc::Waveform::Random);
