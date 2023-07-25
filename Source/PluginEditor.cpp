@@ -336,6 +336,8 @@ void MSUtilityAudioProcessorEditor::resized()
     //WidthSection
 
     stereowidthDial.setBounds(20, 50, 260, 100);
+    stereowidthDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     inputSel.setBounds(30, 60, 20, 20);
     outputSel.setBounds(70, 60, 20, 20);
 
@@ -347,30 +349,59 @@ void MSUtilityAudioProcessorEditor::resized()
     float dialHeight = 85;
 
         //Mid
+
+    
     cutoffmidDial.setBounds(dialXmid, 136, dialWidth, dialHeight);
+    cutoffmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     resonancemidDial.setBounds(30, 140, 20, 75);
+    resonancemidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     modemidSel.setBounds(115, 140, 20, 20);
 
         //Side
     cutoffsideDial.setBounds(dialXside, 136, dialWidth, dialHeight);
+    cutoffsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     resonancesideDial.setBounds(252.5, 140, 20, 75);
+    resonancesideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     modesideSel.setBounds(167.5, 140, 20, 20);
 
     //DelaySection
 
         //Mid
     sendmidDial.setBounds(dialXmid, 230, dialWidth, dialHeight);
+    sendmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     timemidDial.setBounds(dialXmid, 300, dialWidth, dialHeight);
+    timemidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     lfospeedmidDial.setBounds(dialXmid, 370, dialWidth, dialHeight);
+    lfospeedmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     lfodepthmidDial.setBounds(dialXmid, 440, dialWidth, dialHeight);
+    lfodepthmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     feedbackmidDial.setBounds(dialXmid, 510, dialWidth, dialHeight);
+    feedbackmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
 
         //Side
     sendsideDial.setBounds(dialXside, 230, dialWidth, dialHeight);
+    sendsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     timesideDial.setBounds(dialXside, 300, dialWidth, dialHeight);
+    timesideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     lfospeedsideDial.setBounds(dialXside, 370, dialWidth, dialHeight);
+    lfospeedsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     lfodepthsideDial.setBounds(dialXside, 440, dialWidth, dialHeight);
+    lfodepthsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+
     feedbacksideDial.setBounds(dialXside, 510, dialWidth, dialHeight);
+    feedbacksideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
 
 
