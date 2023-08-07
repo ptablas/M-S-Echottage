@@ -58,7 +58,7 @@ class Osc
 private:
 
         static double m_sampleRate;
-        double m_phase, m_speed, m_depth, m_out;
+        double m_phase, m_speed, m_depth, m_out, m_in;
         Waveform m_waveform;
         bool m_sampler = 0;
         
@@ -100,5 +100,6 @@ private:
         
         void setWaveform(Waveform waveform);
 
-        double output(double speed, double depth); 
+        double output(double speed, double depth);
+        double output(double speed, double depth, float * input);
 };

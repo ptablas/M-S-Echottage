@@ -73,6 +73,7 @@ private:
 
     std::string Input_Type = "Stereo";
     std::string Output_Type = "Stereo";
+
     float xMidRaw;
     float xSideRaw;
 

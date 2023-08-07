@@ -55,6 +55,18 @@ double Osc::output(double speed, double depth)
     return (m_out * m_depth);
 }
 
+double Osc::output(double speed, double depth, float * input)
+{
+    m_speed = speed;
+    m_depth = depth;
+    m_in = *input;
+
+    m_waveSwitch();
+    m_calculatePhase();
+
+    return (m_out * m_depth);
+}
+
 void Osc::m_waveSwitch()
 {
     switch (m_waveform)
@@ -93,7 +105,11 @@ void Osc::m_waveSwitch()
 
     case Random:
 
-        m_out = m_randomDouble();
+        if (m_sampler == 1)
+        {
+            m_out = m_randomDouble();
+            m_sampler = 0;
+        }
 
         break;
 
@@ -101,7 +117,7 @@ void Osc::m_waveSwitch()
 
         if (m_sampler == 1)
         {
-            m_out = m_randomDouble();
+            m_out = m_in;
             m_sampler = 0;
         }
 
@@ -122,7 +138,12 @@ void Osc::m_calculatePhase()
 
 double Osc::m_randomDouble()
 {
-    static std::mt19937 gen(0);
+    //generate seed
+    std::random_device rd;
+    std::seed_seq sd{rd(), rd(), rd(), rd()};
+    
+    //generate random double
+    static std::mt19937 gen(sd);
     static std::uniform_real_distribution<double> dis(-1.0, 1.0);
     return dis(gen);
 }
