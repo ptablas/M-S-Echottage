@@ -18,6 +18,9 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
 
    // Here all user-interactive elements, their ranges and value steps are defined and attached to a value from the treeState
 
+    audioProcessor.visualiser.setBounds(10, 10, 200, 200);
+    audioProcessor.visualiser.setColours(juce::Colours::black, juce::Colours::whitesmoke);
+    addAndMakeVisible(audioProcessor.visualiser);
 
    //WidthSection     
 
@@ -352,6 +355,7 @@ void MSUtilityAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 
+    audioProcessor.visualiser.setBounds(10, 10, 200, 200);
 
     //WidthSection
 

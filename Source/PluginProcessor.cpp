@@ -190,6 +190,11 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
     LFO_Depth_Side_Target.reset(sampleRate, rampTime);
     LFO_Speed_Mid_Target.reset(sampleRate, rampTime);
     LFO_Speed_Side_Target.reset(sampleRate, rampTime);
+
+    //
+
+    visualiser.setBufferSize(30);
+    visualiser.setRepaintRate(300);
           
 }
 
@@ -275,6 +280,10 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
 
                Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
                Time_Mid =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
+
+               float time_side[1] = { lfoValueSide };
+
+               visualiser.pushSample(time_side, 1);
 
                //Mid Delay
                 
