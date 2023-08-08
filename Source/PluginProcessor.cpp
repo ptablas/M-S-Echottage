@@ -281,9 +281,12 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
                Time_Mid =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
 
-               float time_side[1] = { lfoValueSide };
+               float time_side_mapped = lfoValueSide / 10000;
 
-               visualiser.pushSample(time_side, 1);
+               float visual_side[1] = { time_side_mapped };
+
+
+               visualiser.pushSample(visual_side, 1);
 
                //Mid Delay
                 
