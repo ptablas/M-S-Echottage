@@ -120,9 +120,13 @@ private:
     juce::SmoothedValue<double> LFO_Speed_Side_Target = 0;
     juce::SmoothedValue<double> LFO_Depth_Side_Target = 0;
 
+<<<<<<< Updated upstream
     //
 
     
+=======
+
+>>>>>>> Stashed changes
 
     //==============================================================================
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (MSUtilityAudioProcessor)
