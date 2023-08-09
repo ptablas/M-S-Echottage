@@ -280,7 +280,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
                Time_Mid =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
 
-               float time_side_mapped = Time_Side / 10000;
+               float time_side_mapped = (Time_Side / 15000) - 1;
 
                float visual_side[1] = { time_side_mapped };
 
