@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "Osc.h"
+#include "Oscilloscope.h"
 
 //==============================================================================
 /**
@@ -57,7 +58,7 @@ public:
 
     void parameterChanged(const juce::String& parameterID, float newValue) override;
 
-    juce::AudioVisualiserComponent visualiser{1};
+    Oscilloscope visualiser;
 
 private:
 
