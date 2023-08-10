@@ -17,6 +17,10 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="j7ZWqa" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
+    <FILE id="jtFJV2" name="dRowAudio_AudioOscilloscope.cpp" compile="1"
+          resource="0" file="Source/dRowAudio_AudioOscilloscope.cpp"/>
+    <FILE id="kWhYYN" name="dRowAudio_AudioOscilloscope.h" compile="0"
+          resource="0" file="Source/dRowAudio_AudioOscilloscope.h"/>
     <FILE id="ONN334" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
     <FILE id="bU6Vpn" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
     <FILE id="p0EQZh" name="Oscilloscope.cpp" compile="1" resource="0"

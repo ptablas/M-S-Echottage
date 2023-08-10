@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "Osc.h"
 #include "Oscilloscope.h"
+#include "dRowAudio_AudioOscilloscope.h"
 
 //==============================================================================
 /**
@@ -59,11 +60,11 @@ public:
     void parameterChanged(const juce::String& parameterID, float newValue) override;
 
     Oscilloscope visualiser;
+    AudioOscilloscope Oscilloscope;
 
 private:
 
     juce::AudioProcessorValueTreeState treeState;
-
 
     // Initialization of Variables for parameterChanged (ultimately for processing block)
 
