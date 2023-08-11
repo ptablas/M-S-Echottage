@@ -285,6 +285,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                float visual_side[1] = { time_side_mapped };
 
                visualiser.pushSample(visual_side, 1);
+               Oscilloscope.processBlock(visual_side, 1);
 
                //Mid Delay
                 

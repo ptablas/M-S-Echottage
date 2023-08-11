@@ -18,9 +18,13 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
 
    // Here all user-interactive elements, their ranges and value steps are defined and attached to a value from the treeState
 
-    audioProcessor.visualiser.setBounds(10, 10, 200, 200);
-    audioProcessor.visualiser.setColours(juce::Colours::black, juce::Colours::whitesmoke);
-    addAndMakeVisible(audioProcessor.visualiser);
+
+
+    
+
+    audioProcessor.Oscilloscope.setBounds(10, 10, 200, 200);
+    //audioProcessor.Oscilloscope.Colo
+    addAndMakeVisible(audioProcessor.Oscilloscope);
 
    //WidthSection     
 
