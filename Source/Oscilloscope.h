@@ -1,60 +1,77 @@
 /*
-  ==============================================================================
-
-    Oscilloscope.h
-    Created: 9 Aug 2023 3:11:24pm
-    Author:  pablo
-
-  ==============================================================================
+==============================================================================
+Oscilloscope.h
+Created : 26 Jan 2016 1 : 06 : 47am
+Author : Geri
+==============================================================================
 */
-
-#pragma once
 
 #include "JuceHeader.h"
 
-class Oscilloscope : public juce::AudioVisualiserComponent
+#ifndef OSCILLOSCOPE_H_INCLUDED
+#define OSCILLOSCOPE_H_INCLUDED
+#include <array>
+
+
+class Oscilloscope : public juce::Component, private juce::Timer
 {
 public:
-    Oscilloscope() : AudioVisualiserComponent(1)
+    //==========================================================================
+    Oscilloscope()
+        : writePos(0)
     {
-        setBufferSize(30);
-        setSamplesPerBlock(256);
-        setRepaintRate(30);
+        startTimer(60);
     }
-
-    void getChannelAsPath(juce::Path& path, const juce::Range<float>* levels,
-        int numLevels, int nextSample)
+    //==========================================================================
+    void pushBuffer(const float* data, int numSamples)
     {
-        path.preallocateSpace(4 * numLevels + 8);
-
-        for (int i = 0; i < numLevels; ++i)
+        for (int i = 0; i < numSamples; ++i)
+            buffer[++writePos % buffer.size()] = data[i];
+    }
+    //==========================================================================
+    void paint(juce::Graphics& g) override
+    {
+        g.fillAll(juce::Colours::black.brighter(0.22f));
+        juce::Rectangle<int> r = getLocalBounds();
+        juce::Path path;
+        path.startNewSubPath(0, 0.5 * r.getHeight());
+        const float bufferYscale = 1.0f;
+        int paintPos = 2;
+        while (paintPos < buffer.size())
         {
-            auto level = -(levels[(nextSample + i) % numLevels].getEnd());
-
-            if (i == 0)
-                path.startNewSubPath(0.0f, level);
-            else
-
-                if (i != i - 1)
-                    path.lineTo((float)i, level); //learning about paths might solve this issue
-                else
-                    path.addStar(path.getCurrentPosition(), 1, 1, 1, 1);
+            if (isZeroCrossing(paintPos))
+                break;
+            ++paintPos;
         }
+        const int posOffset = paintPos;
+        while (paintPos < buffer.size())
+        {
+            juce::Point<float> p((paintPos - posOffset) * r.getWidth() / paintSize,
+                0.5 * ((bufferYscale * buffer[paintPos]) + 1) * r.getHeight());
 
-        for (int i = numLevels; --i >= 0;)
-            path.lineTo((float)i, -(levels[(nextSample + i) % numLevels].getStart()));
-
-        path.closeSubPath();
+            path.lineTo(p);
+            ++paintPos;
+        }
+        g.setColour(juce::Colour(0, 102, 204));
+        g.strokePath(path, juce::PathStrokeType(1.5f));
     }
-
-    void paintChannel(juce::Graphics& g, juce::Rectangle<float> area,
-        const juce::Range<float>* levels, int numLevels, int nextSample)
+private:
+    //==========================================================================
+    void timerCallback() override
     {
-        juce::Path p;
-        getChannelAsPath(p, levels, numLevels, nextSample);
-
-        g.fillPath(p, juce::AffineTransform::fromTargetPoints(0.f, -1.0f, area.getX(), area.getY(),
-                                                              0.0f, 1.0f, area.getX(), area.getBottom(),
-                                                              (float)numLevels, -1.0f, area.getRight(), area.getY()));
+        repaint();
     }
+    bool isZeroCrossing(int i) const noexcept
+    {
+        jassert(i > 0);
+        return buffer[i] > buffer[i - 1] && buffer[i] > 0 && buffer[i - 1] < 0;
+    }
+    //==========================================================================
+    std::array<float, 1024> buffer;
+    std::size_t writePos;
+    const int bufferSize = 16384;
+    const int paintSize = 256;
 };
+
+
+#endif  // OSCILLOSCOPE_H_INCLUDED
