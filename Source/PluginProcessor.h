@@ -58,7 +58,10 @@ public:
 
     void parameterChanged(const juce::String& parameterID, float newValue) override;
 
-    Oscilloscope visualiser;
+    AudioBufferQueue<float> audioBufferQueue;
+    AudioBufferQueue<float>& getAudioBufferQueue() noexcept { return audioBufferQueue; }
+
+    ScopeDataCollector<float> scopeDataCollector{ audioBufferQueue };
 
 private:
 
