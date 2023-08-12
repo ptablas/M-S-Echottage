@@ -279,9 +279,9 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
                Time_Mid =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
 
-               float time_side_mapped = (Time_Side / 15000) - 1;
+               float time_side_mapped = ((Time_Side / 20000) - 0.5);
 /*
-               const size_t sample_max = 8192;
+               const size_t sample_max = 8192; 
                static size_t sample_indx = 0;
                static float visual_side[sample_max];
 
@@ -298,7 +298,7 @@ void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, ju
                }
                 
 */
-               float visual_side[1] = {  lfoSide.output(LFO_Speed_Side_Target.getNextValue(), 1)}; // THIS WORKS WITH AUDIO INPUT NOT WITH time_side_mapped
+               float visual_side[1] = { -time_side_mapped}; // THIS WORKS WITH AUDIO INPUT NOT WITH time_side_mapped
 
                visualiser.pushBuffer(visual_side, 1);
 

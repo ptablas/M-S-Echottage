@@ -20,7 +20,7 @@ public:
     Oscilloscope()
         : writePos(0)
     {
-        startTimer(60);
+        startTimer(30);
     }
     //==========================================================================
     void pushBuffer(const float* data, int numSamples)
@@ -34,15 +34,15 @@ public:
         g.fillAll(juce::Colours::black.brighter(0.22f));
         juce::Rectangle<int> r = getLocalBounds();
         juce::Path path;
-        path.startNewSubPath(0, 0.5 * r.getHeight());
-        const float bufferYscale = 1.0f;
+        path.startNewSubPath(-1, r.getHeight()); // originally 0.5 *
+        const float bufferYscale = 1;
         int paintPos = 2;
         while (paintPos < buffer.size())
-        {
+        { 
             if (isZeroCrossing(paintPos))
                 break;
             ++paintPos;
-        }
+        } 
         const int posOffset = paintPos;
         while (paintPos < buffer.size())
         {
@@ -67,10 +67,10 @@ private:
         return buffer[i] > buffer[i - 1] && buffer[i] > 0 && buffer[i - 1] < 0;
     }
     //==========================================================================
-    std::array<float, 1024> buffer;
+    std::array<float, 44100> buffer;
     std::size_t writePos;
-    const int bufferSize = 16384;
-    const int paintSize = 256;
+    const int bufferSize = 22050;
+    const int paintSize = 44100; 
 };
 
 

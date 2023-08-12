@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uXizji" name="M/S Echo-ttage" projectType="audioplug" useAppConfig="0"
+<JUCERPROJECT id="uXizji" name="MS Echo-ttage" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginAUExportPrefix="M/S Echo-ttage" pluginName="M/S Echo-ttage"
+              pluginAUExportPrefix="MS Echo-ttage" pluginName="MS Echo-ttage"
               pluginDesc="Variable Delay Time &amp; Mid/Side Utility" pluginManufacturer="Ansibles"
               pluginVST3Category="Delay,Fx,Tools" bundleIdentifier="com.ansibles.MSEchottage"
               aaxIdentifier="com.ansibles.MSEchottage" pluginManufacturerCode="Ansi"
-              pluginCode="Msec" companyName="Ansibles">
-  <MAINGROUP id="kgGTjG" name="M/S Echo-ttage">
+              pluginCode="Msec" companyName="Ansibles" cppLanguageStandard="latest">
+  <MAINGROUP id="kgGTjG" name="MS Echo-ttage">
     <GROUP id="{815ADB0C-8EAF-D3AD-3E1C-F7F4A3FBDF55}" name="Source">
       <FILE id="AFFtMK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
