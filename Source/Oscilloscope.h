@@ -12,49 +12,28 @@
 
 #include "JuceHeader.h"
 
-class Oscilloscope : public juce::AudioVisualiserComponent
-{
+template <typename sampletype>
+class OscilloscopeBuffer {
+    
 public:
-    Oscilloscope() : AudioVisualiserComponent(1)
-    {
-        setBufferSize(30);
-        setSamplesPerBlock(256);
-        setRepaintRate(30);
-    }
+    OscilloscopeBuffer();
+    
+    void setBufferSize(int bufferSize) { m_bufferSize = bufferSize; }
+    void pushSample(sampletype sample) { m_samples.push_back(sample); };
 
-    void getChannelAsPath(juce::Path& path, const juce::Range<float>* levels,
-        int numLevels, int nextSample)
-    {
-        path.preallocateSpace(4 * numLevels + 8);
 
-        for (int i = 0; i < numLevels; ++i)
-        {
-            auto level = -(levels[(nextSample + i) % numLevels].getEnd());
+private:
+    int m_bufferSize;
+    std::vector<sampletype> m_samples;
 
-            if (i == 0)
-                path.startNewSubPath(0.0f, level);
-            else
+};
 
-                if (i != i - 1)
-                    path.lineTo((float)i, level); //learning about paths might solve this issue
-                else
-                    path.addStar(path.getCurrentPosition(), 1, 1, 1, 1);
-        }
+class Oscilloscope : juce::Component, 
+                     juce::Timer {
 
-        for (int i = numLevels; --i >= 0;)
-            path.lineTo((float)i, -(levels[(nextSample + i) % numLevels].getStart()));
+public:
 
-        path.closeSubPath();
-    }
 
-    void paintChannel(juce::Graphics& g, juce::Rectangle<float> area,
-        const juce::Range<float>* levels, int numLevels, int nextSample)
-    {
-        juce::Path p;
-        getChannelAsPath(p, levels, numLevels, nextSample);
+private:
 
-        g.fillPath(p, juce::AffineTransform::fromTargetPoints(0.f, -1.0f, area.getX(), area.getY(),
-                                                              0.0f, 1.0f, area.getX(), area.getBottom(),
-                                                              (float)numLevels, -1.0f, area.getRight(), area.getY()));
-    }
 };
