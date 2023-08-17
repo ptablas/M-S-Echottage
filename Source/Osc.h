@@ -40,27 +40,38 @@
 #include <JuceHeader.h>
 #endif  
 
+enum class Quadrant {
+    firstQuadrant,
+    secondQuadrant,
+    thirdQuadrant,
+    fourthQuadrant
+};
+
+enum class Waveform {
+    Sine = 0,
+    Triangle,
+    Square,
+    Sawtooth,
+    Random,
+    SH
+};
 
 class Osc
 {
-    public:
-
-        enum Waveform
-        {
-            Sine = 0,
-            Triangle,
-            Square,
-            Sawtooth,
-            Random,
-            SH
-        };
 
 private:
 
         static double m_sampleRate;
         double m_phase, m_speed, m_depth, m_out, m_in;
         Waveform m_waveform;
+
         bool m_sampler = 0;
+
+        Quadrant m_quadrant = Quadrant::firstQuadrant;
+        Quadrant m_pquadrant = Quadrant::fourthQuadrant;
+
+        void m_samplerer();
+        void m_quadrantUpdate(Quadrant quadrant);
         
         void m_calculatePhase();
         double m_randomDouble();
@@ -69,13 +80,13 @@ private:
     public:
         
         Osc()
-            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Sine)
+            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Waveform::Sine)
         {
             m_sampleRate = 0;
         }
 
         Osc(double sR)
-            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Sine)
+            : m_out(0), m_phase(0), m_speed(0), m_depth(0), m_waveform(Waveform::Sine)
         {
             m_sampleRate = sR;
         }

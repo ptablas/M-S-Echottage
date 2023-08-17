@@ -71,13 +71,13 @@ void Osc::m_waveSwitch()
 {
     switch (m_waveform)
     {
-    case Sine:
+    case Waveform::Sine:
 
         m_out = std::sin(m_phase);
 
         break;
 
-    case Triangle:
+    case Waveform::Triangle:
 
         if (m_phase > 0)
             m_out = -1 + (2 * m_phase / M_PI);
@@ -87,13 +87,13 @@ void Osc::m_waveSwitch()
 
         break;
 
-    case Sawtooth:
+    case Waveform::Sawtooth:
 
         m_out = m_phase / (2 * M_PI);
 
         break;
 
-    case Square:
+    case Waveform::Square:
 
         if (m_phase > 0)
             m_out = 1;
@@ -103,24 +103,14 @@ void Osc::m_waveSwitch()
 
         break;
 
-    case Random:
+    case Waveform::Random:
 
-        if (m_sampler == 1)
-        {
-            m_out = m_randomDouble();
-            m_sampler = 0;
-        }
-
+        if (m_sampler == 1) m_out = m_randomDouble();
         break;
 
-    case SH:
+    case Waveform::SH:
 
-        if (m_sampler == 1)
-        {
-            m_out = m_in;
-            m_sampler = 0;
-        }
-
+        if (m_sampler == 1) m_out = m_in;
         break;
     }
 }
@@ -129,11 +119,27 @@ void Osc::m_calculatePhase()
 {
     m_phase += (2 * M_PI) * m_speed / m_sampleRate;
 
-    if (m_phase > M_PI)
-    {
-        m_phase -= (2 * M_PI);
-        m_sampler = 1;
-    }
+    if (m_phase > M_PI)  m_phase -= (2 * M_PI);
+    if (m_waveform == Waveform::Random || m_waveform == Waveform::SH) m_samplerer();
+}
+
+
+void Osc::m_samplerer()
+{
+    if (m_phase > 0             < M_PI / 2)     { m_quadrantUpdate(Quadrant::firstQuadrant);};
+    if (m_phase > M_PI / 2      < M_PI)         { m_quadrantUpdate(Quadrant::secondQuadrant); };
+    if (m_phase > M_PI          < 3 * M_PI / 2) { m_quadrantUpdate(Quadrant::thirdQuadrant); };
+    if (m_phase > 3 * M_PI / 2  < 2 * M_PI)     { m_quadrantUpdate(Quadrant::fourthQuadrant); };
+}
+
+void Osc::m_quadrantUpdate(Quadrant quadrant)
+{
+    m_quadrant = quadrant;
+
+    if (m_quadrant != m_pquadrant) m_sampler = true;
+    else                           m_sampler = false;
+
+    m_pquadrant = quadrant;
 }
 
 double Osc::m_randomDouble()
