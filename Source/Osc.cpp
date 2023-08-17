@@ -106,11 +106,13 @@ void Osc::m_waveSwitch()
     case Waveform::Random:
 
         if (m_sampler == 1) m_out = m_randomDouble();
+        else m_out = m_out;
         break;
 
     case Waveform::SH:
 
         if (m_sampler == 1) m_out = m_in;
+        else m_out = m_out;
         break;
     }
 }
@@ -124,12 +126,19 @@ void Osc::m_calculatePhase()
 }
 
 
-void Osc::m_samplerer()
+void Osc::m_samplerer() // Stages are incorrectly set
 {
-    if (m_phase > 0             < M_PI / 2)     { m_quadrantUpdate(Quadrant::firstQuadrant);};
-    if (m_phase > M_PI / 2      < M_PI)         { m_quadrantUpdate(Quadrant::secondQuadrant); };
-    if (m_phase > M_PI          < 3 * M_PI / 2) { m_quadrantUpdate(Quadrant::thirdQuadrant); };
-    if (m_phase > 3 * M_PI / 2  < 2 * M_PI)     { m_quadrantUpdate(Quadrant::fourthQuadrant); };
+    if (m_phase > 0)
+    {
+        if (m_phase < M_PI / 2) m_quadrantUpdate(Quadrant::firstQuadrant);
+        else                    m_quadrantUpdate(Quadrant::secondQuadrant);
+    }
+
+    if (m_phase < 0)
+    {
+        if (m_phase < -M_PI / 2) m_quadrantUpdate(Quadrant::thirdQuadrant);
+        else                     m_quadrantUpdate(Quadrant::fourthQuadrant);
+    }
 }
 
 void Osc::m_quadrantUpdate(Quadrant quadrant)

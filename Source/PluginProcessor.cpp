@@ -498,22 +498,22 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
         switch ((int)newValue)
         {
         case 0:
-            lfoMid.setWaveform(Osc::Waveform::Sine);
+            lfoMid.setWaveform(Waveform::Sine);
             break;
         case 1:
-            lfoMid.setWaveform(Osc::Waveform::Triangle);
+            lfoMid.setWaveform(Waveform::Triangle);
             break;
         case 2:
-            lfoMid.setWaveform(Osc::Waveform::Sawtooth);
+            lfoMid.setWaveform(Waveform::Sawtooth);
             break;
         case 3:
-            lfoMid.setWaveform(Osc::Waveform::Square);
+            lfoMid.setWaveform(Waveform::Square);
             break;
         case 4:
-            lfoMid.setWaveform(Osc::Waveform::Random);
+            lfoMid.setWaveform(Waveform::Random);
             break;
         case 5:
-            lfoMid.setWaveform(Osc::Waveform::SH);
+            lfoMid.setWaveform(Waveform::SH);
             break;
         }
     }
@@ -546,22 +546,22 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
         switch ((int)newValue)
         {
         case 0:
-            lfoSide.setWaveform(Osc::Waveform::Sine);
+            lfoSide.setWaveform(Waveform::Sine);
             break;
         case 1:
-            lfoSide.setWaveform(Osc::Waveform::Triangle);
+            lfoSide.setWaveform(Waveform::Triangle);
             break;
         case 2:
-            lfoSide.setWaveform(Osc::Waveform::Sawtooth);
+            lfoSide.setWaveform(Waveform::Sawtooth);
             break;
         case 3:
-            lfoSide.setWaveform(Osc::Waveform::Square);
+            lfoSide.setWaveform(Waveform::Square);
             break;
         case 4:
-            lfoSide.setWaveform(Osc::Waveform::Random);
+            lfoSide.setWaveform(Waveform::Random);
             break;
         case 5:
-            lfoSide.setWaveform(Osc::Waveform::SH);
+            lfoSide.setWaveform(Waveform::SH);
             break;
         }
     }
