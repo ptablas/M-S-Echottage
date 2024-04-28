@@ -9,6 +9,16 @@
               cppLanguageStandard="20">
   <MAINGROUP id="kgGTjG" name="Ek0">
     <GROUP id="{815ADB0C-8EAF-D3AD-3E1C-F7F4A3FBDF55}" name="Source">
+      <GROUP id="{BADCF400-5548-AEE4-632A-714B030A4460}" name="Utilities">
+        <FILE id="ONN334" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
+        <FILE id="bU6Vpn" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
+      </GROUP>
+      <GROUP id="{76502E51-7B78-DCF6-A826-5E6F884DA1B8}" name="Components">
+        <FILE id="bqQnuu" name="CheckBackground.h" compile="0" resource="0"
+              file="Source/CheckBackground.h"/>
+        <FILE id="LEkENd" name="Oscilloscope.h" compile="0" resource="0" file="Source/Oscilloscope.h"/>
+        <FILE id="UwOr8x" name="WoodFrame.h" compile="0" resource="0" file="Source/WoodFrame.h"/>
+      </GROUP>
       <FILE id="AFFtMK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="aOAqSv" name="PluginProcessor.h" compile="0" resource="0"
@@ -17,8 +27,6 @@
             file="Source/PluginEditor.cpp"/>
       <FILE id="j7ZWqa" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
-    <FILE id="ONN334" name="Osc.cpp" compile="1" resource="0" file="Source/Osc.cpp"/>
-    <FILE id="bU6Vpn" name="Osc.h" compile="0" resource="0" file="Source/Osc.h"/>
   </MAINGROUP>
   <JUCEOPTIONS JUCE_STRICT_REFCOUNTEDPOINTER="1" JUCE_VST3_CAN_REPLACE_VST2="0"/>
   <EXPORTFORMATS>

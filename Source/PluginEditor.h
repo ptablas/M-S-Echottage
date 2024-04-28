@@ -11,6 +11,10 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 
+#include "CheckBackground.h"
+#include "WoodFrame.h"
+#include "Oscilloscope.h"
+
 //==============================================================================
 /**
 */
@@ -26,25 +30,28 @@ juce::AudioProcessorValueTreeState&);
     void resized() override;
 
 private:
-
-    //Sliders&ComboBoxes                <- Objects to be painted are defined;
-
+    // Sliders and ComboBoxes
     juce::Slider sendDial;
     juce::Slider timeDial;
     juce::Slider LFOSpeedDial;
     juce::Slider LFODepthDial;
-    juce::ComboBox waveformDial;
+    juce::Slider waveformDial;
     juce::Slider feedbackDial;
 
-    //Values                            <- Values for treeState
-
+    // ValueTreeState Values
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> sendValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> timeValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> LFOSpeedValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> LFODepthValue;
-    std::unique_ptr <juce::AudioProcessorValueTreeState::ComboBoxAttachment> waveformValue;
+    std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> waveformValue;
     std::unique_ptr <juce::AudioProcessorValueTreeState::SliderAttachment> feedbackValue;
 
+    // Custom Components
+    CheckBackground checkBackground;
+    WoodFrame woodFrame;
+    Oscilloscope oscilloscope;
+    
+    // Plugin utilities
     MSUtilityAudioProcessor& audioProcessor;
     juce::AudioProcessorValueTreeState& treeState;
 
