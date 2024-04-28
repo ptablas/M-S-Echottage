@@ -14,191 +14,61 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
 (MSUtilityAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), audioProcessor (p), treeState(vts)
 {
-    setSize (300, 600);         // a pluging twice as long than wide
 
-   // Here all user-interactive elements, their ranges and value steps are defined and attached to a value from the treeState
+    /* Here all user - interactive elements, their ranges and value steps are 
+    defined and attached to a value from the treeState */
 
-
-   //WidthSection     
-
-       // stereowidthDial&Value
-    stereowidthValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "stereowidth", stereowidthDial);
-    stereowidthDial.setSliderStyle(juce::Slider::LinearHorizontal);
-    stereowidthDial.setRange(0.f, 2.0f, 0.0001f);
-    stereowidthDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&stereowidthDial);
-        
-        //inputChoice&Sel
-    inputSel.addItem("Stereo", 1);
-    inputSel.addItem("Mid/Side", 2);
-    inputChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "input", inputSel);
-    addAndMakeVisible(&inputSel);
-
-        //outputChoice&Sel
-    outputSel.addItem("Stereo", 1);
-    outputSel.addItem("Mid/Side", 2);
-    outputChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "output", outputSel);
-    addAndMakeVisible(&outputSel);
-
-    //FilterSection
-
-        //Mid
-
-            //CutoffDial&Value
-    cutoffmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "cutoffmid", cutoffmidDial);
-    cutoffmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    cutoffmidDial.setRange(20.0f, 20000.0f, 0.0001f);
-    cutoffmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&cutoffmidDial);
-
-            //ResonanceDial&Value
-    resonancemidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "resonancemid", resonancemidDial);
-    resonancemidDial.setSliderStyle(juce::Slider::LinearVertical);
-    resonancemidDial.setRange(0.0001, 0.7f, 0.0001f);
-    resonancemidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&resonancemidDial);
-
-            //Filter Type Choice&Sel
-    modemidSel.addItem("LPF", 1);
-    modemidSel.addItem("BPF", 2);
-    modemidSel.addItem("HPF", 3);
-    modemidChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "modemid", modemidSel);
-    addAndMakeVisible(&modemidSel);
-
-        //Side
-
-            //CutoffDial&Value
-    cutoffsideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "cutoffside", cutoffsideDial);
-    cutoffsideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    cutoffsideDial.setRange(20.0f, 20000.0f, 0.0001f);
-    cutoffsideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&cutoffsideDial);
-
-             //ResonanceDial&Value
-    resonancesideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "resonanceside", resonancesideDial);
-    resonancesideDial.setSliderStyle(juce::Slider::LinearVertical);
-    resonancesideDial.setRange(0.0001, 0.7f, 0.0001f);
-    resonancesideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&resonancesideDial);
-
-            //Filter Type Choice&Sel
-    modesideSel.addItem("LPF", 1);
-    modesideSel.addItem("BPF", 2);
-    modesideSel.addItem("HPF", 3);
-    modesideChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "modeside", modesideSel);
-    addAndMakeVisible(&modesideSel);
-
-    // Delay Section
-
-        //Mid
-
-            // sendDial&Value
-    sendmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "sendmid", sendmidDial);
-    sendmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    sendmidDial.setRange(0.f, 1.0f, 0.0001f);
-    sendmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&sendmidDial);
+    // sendDial&Value
+    sendValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (treeState, "send", sendDial);
+    sendDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    sendDial.setRange(0.f, 1.0f, 0.0001f);
+    sendDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&sendDial);
 
             // timeDial&Value
-    timemidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "timemid", timemidDial);
-    timemidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    timemidDial.setRange(0.f, 20000.f, 0.0001f);
-    timemidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&timemidDial);
+    timeValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (treeState, "time", timeDial);
+    timeDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    timeDial.setRange(0.f, 20000.f, 0.0001f);
+    timeDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&timeDial);
 
             // lfospeedDial&Value
-    lfospeedmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "lfospeedmid", lfospeedmidDial);
-    lfospeedmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    lfospeedmidDial.setRange(0.f, 10.f, 0.0001f);
-    lfospeedmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&lfospeedmidDial);
+    LFOSpeedValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (treeState, "lfospeed", LFOSpeedDial);
+    LFOSpeedDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    LFOSpeedDial.setRange(0.f, 10.f, 0.0001f);
+    LFOSpeedDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&LFOSpeedDial);
 
             // lfodepthDial&Value
-    lfodepthmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "lfodepthmid", lfodepthmidDial);
-    lfodepthmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    lfodepthmidDial.setRange(0.f, 20000.f / 2.f, 0.0001f);
-    lfodepthmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&lfodepthmidDial);
+    LFODepthValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (treeState, "lfodepth", LFODepthDial);
+    LFODepthDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    LFODepthDial.setRange(0.f, 20000.f / 2.f, 0.0001f);
+    LFODepthDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&LFODepthDial);
 
             // Waveform Type Choice&Sel
-    waveformmidSel.addItem("Sine", 1);
-    waveformmidSel.addItem("Triangle", 2);
-    waveformmidSel.addItem("Sawtooth", 3);
-    waveformmidSel.addItem("Square", 4);
-    waveformmidSel.addItem("Random", 5);
-    waveformmidSel.addItem("Sample & Hold", 6);
-    waveformmidChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "waveformmid", waveformmidSel);
-    addAndMakeVisible(&waveformmidSel);
+    waveformDial.addItem("Sine", 1);
+    waveformDial.addItem("Triangle", 2);
+    waveformDial.addItem("Sawtooth", 3);
+    waveformDial.addItem("Square", 4);
+    waveformDial.addItem("Random", 5);
+    waveformDial.addItem("Sample & Hold", 6);
+    waveformValue = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "waveform", waveformDial);
+    addAndMakeVisible(&waveformDial);
 
             // feedbackDial&Value
-    feedbackmidValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "feedbackmid", feedbackmidDial);
-    feedbackmidDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    feedbackmidDial.setRange(0.f, 0.9f, 0.0001f);
-    feedbackmidDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&feedbackmidDial);
+    feedbackValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
+        (treeState, "feedback", feedbackDial);
+    feedbackDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
+    feedbackDial.setRange(0.f, 0.9f, 0.0001f);
+    feedbackDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
+    addAndMakeVisible(&feedbackDial);
 
-        //Side
- 
-            // sendDial&Value
-    sendsideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "sendside", sendsideDial);
-    sendsideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    sendsideDial.setRange(0.f, 1.0f, 0.0001f);
-    sendsideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&sendsideDial);
-
-    // timeDial&Value
-    timesideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "timeside", timesideDial);
-    timesideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    timesideDial.setRange(0.f, 20000.f, 0.0001f);
-    timesideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&timesideDial);
-
-    // lfospeedDial&Value
-    lfospeedsideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "lfospeedside", lfospeedsideDial);
-    lfospeedsideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    lfospeedsideDial.setRange(0.f, 10.f, 0.0001f);
-    lfospeedsideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&lfospeedsideDial);
-
-    // lfodepthDial&Value
-    lfodepthsideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "lfodepthside", lfodepthsideDial);
-    lfodepthsideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    lfodepthsideDial.setRange(0.f, 20000.f / 2.f, 0.0001f);
-    lfodepthsideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&lfodepthsideDial);
-
-    // Waveform Type Choice&Sel
-    waveformsideSel.addItem("Sine", 1);
-    waveformsideSel.addItem("Triangle", 2);
-    waveformsideSel.addItem("Sawtooth", 3);
-    waveformsideSel.addItem("Square", 4);
-    waveformsideSel.addItem("Random", 5);
-    waveformsideSel.addItem("Sample & Hold", 6);
-    waveformsideChoice = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(treeState, "waveformside", waveformsideSel);
-    addAndMakeVisible(&waveformsideSel);
-
-    // feedbackDial&Value
-    feedbacksideValue = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>
-        (treeState, "feedbackside", feedbacksideDial);
-    feedbacksideDial.setSliderStyle(juce::Slider::RotaryVerticalDrag);
-    feedbacksideDial.setRange(0.f, 0.9f, 0.0001f);
-    feedbacksideDial.setTextBoxStyle(juce::Slider::TextEntryBoxPosition::NoTextBox, true, 0, 0);
-    addAndMakeVisible(&feedbacksideDial);
-
+    setSize(300, 600);         // a pluging twice as long than wide
 }
 
 MSUtilityAudioProcessorEditor::~MSUtilityAudioProcessorEditor()
@@ -352,78 +222,25 @@ void MSUtilityAudioProcessorEditor::resized()
     // This is generally where you'll want to lay out the positions of any
     // subcomponents in your editor..
 
-
-    //WidthSection
-
-    stereowidthDial.setBounds(20, 50, 260, 100);
-    stereowidthDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    inputSel.setBounds(30, 60, 20, 20);
-    outputSel.setBounds(70, 60, 20, 20);
-
-    //FilterSection
-
     float dialXmid = (getWidth() / 10) + 5; // dialMid is the X position for the left side dials
     float dialXside = 172.5f;           // while dialSide is the X position for the right-hand side.
     float dialWidth = 90;
     float dialHeight = 85;
 
-        //Mid
+    sendDial.setBounds(dialXmid, 230, dialWidth, dialHeight);
+    sendDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-    
-    cutoffmidDial.setBounds(dialXmid, 136, dialWidth, dialHeight);
-    cutoffmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+    timeDial.setBounds(dialXmid, 300, dialWidth, dialHeight);
+    timeDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-    resonancemidDial.setBounds(112.5, 140, 20, 75);
-    resonancemidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+    LFOSpeedDial.setBounds(dialXmid, 370, dialWidth, dialHeight);
+    LFOSpeedDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-    modemidSel.setBounds(25, 140, 20, 20);
+    LFODepthDial.setBounds(dialXmid, 440, dialWidth, dialHeight);
+    LFODepthDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 
-        //Side
-    cutoffsideDial.setBounds(dialXside, 136, dialWidth, dialHeight);
-    cutoffsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+    waveformDial.setBounds(110, 380, 20, 20);
 
-    resonancesideDial.setBounds(252.5, 140, 20, 75);
-    resonancesideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    modesideSel.setBounds(167.5, 140, 20, 20);
-
-    //DelaySection
-
-        //Mid
-    sendmidDial.setBounds(dialXmid, 230, dialWidth, dialHeight);
-    sendmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    timemidDial.setBounds(dialXmid, 300, dialWidth, dialHeight);
-    timemidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    lfospeedmidDial.setBounds(dialXmid, 370, dialWidth, dialHeight);
-    lfospeedmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    lfodepthmidDial.setBounds(dialXmid, 440, dialWidth, dialHeight);
-    lfodepthmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    waveformmidSel.setBounds(110, 380, 20, 20);
-
-    feedbackmidDial.setBounds(dialXmid, 510, dialWidth, dialHeight);
-    feedbackmidDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-
-        //Side
-    sendsideDial.setBounds(dialXside, 230, dialWidth, dialHeight);
-    sendsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    timesideDial.setBounds(dialXside, 300, dialWidth, dialHeight);
-    timesideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    lfospeedsideDial.setBounds(dialXside, 370, dialWidth, dialHeight);
-    lfospeedsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    lfodepthsideDial.setBounds(dialXside, 440, dialWidth, dialHeight);
-    lfodepthsideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
-
-    waveformsideSel.setBounds(252.5, 380, 20, 20);
-
-    feedbacksideDial.setBounds(dialXside, 510, dialWidth, dialHeight);
-    feedbacksideDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+    feedbackDial.setBounds(dialXmid, 510, dialWidth, dialHeight);
+    feedbackDial.setPopupDisplayEnabled(true, true, NULL, 2000);
 }

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<JUCERPROJECT id="uXizji" name="M/S Echo-ttage" projectType="audioplug" useAppConfig="0"
+<JUCERPROJECT id="uXizji" name="Ek0" projectType="audioplug" useAppConfig="0"
               addUsingNamespaceToJuceHeader="0" displaySplashScreen="1" jucerFormatVersion="1"
-              pluginAUExportPrefix="M/S Echo-ttage" pluginName="M/S Echo-ttage"
-              pluginDesc="Variable Delay Time &amp; Mid/Side Utility" pluginManufacturer="Ansibles"
-              pluginVST3Category="Delay,Fx,Tools" bundleIdentifier="com.ansibles.MSEchottage"
-              aaxIdentifier="com.ansibles.MSEchottage" pluginManufacturerCode="Ansi"
-              pluginCode="Msec" companyName="Ansibles">
-  <MAINGROUP id="kgGTjG" name="M/S Echo-ttage">
+              pluginAUExportPrefix="Ek0" pluginName="Ek0" pluginDesc="Variable Delay Time-based multi FXs"
+              pluginManufacturer="Ansibles" pluginVST3Category="Delay,Fx,Tools"
+              bundleIdentifier="com.ansibles.Ek0" aaxIdentifier="com.ansibles.Ek0"
+              pluginManufacturerCode="Ansi" pluginCode="Msec" companyName="Ansibles"
+              cppLanguageStandard="20">
+  <MAINGROUP id="kgGTjG" name="Ek0">
     <GROUP id="{815ADB0C-8EAF-D3AD-3E1C-F7F4A3FBDF55}" name="Source">
       <FILE id="AFFtMK" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
@@ -24,8 +24,8 @@
   <EXPORTFORMATS>
     <XCODE_MAC targetFolder="Builds/MacOSX">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="MSUtility"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="MSUtility"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="Ek0"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Ek0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../../../JUCE/modules"/>
@@ -45,8 +45,9 @@
     </XCODE_MAC>
     <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" enablePluginBinaryCopyStep="1" vst3BinaryLocation="C:\Users\pablo\Documents\REAPER PLUGINS"/>
-        <CONFIGURATION isDebug="0" name="Release"/>
+        <CONFIGURATION isDebug="1" name="Debug" enablePluginBinaryCopyStep="1" vst3BinaryLocation="C:\Users\pablo\Documents\ReaperPlugins"
+                       targetName="Ek0" binaryPath="C:\Users\pablo\Documents\ReaperPlugins"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Ek0"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../juce"/>

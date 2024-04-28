@@ -23,52 +23,19 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
 #endif
     ), treeState(*this, nullptr, juce::Identifier("PARAMETERS"),
         {
+           // Definition of parameters IDs, ranges and starting values to be passed to TreeState
 
-            //Definition of parameters IDs, ranges and starting values to be passed to TreeState
-
-            //Width Section
-            std::make_unique<juce::AudioParameterFloat>("stereowidth", "StereoWidth", 0.f, 2.f, 1.f),
-            std::make_unique<juce::AudioParameterChoice>("input", "Input", juce::StringArray("Stereo", "Mid/Side"), 0),
-            std::make_unique<juce::AudioParameterChoice>("output", "Output", juce::StringArray("Stereo", "Mid/Side"), 0),
-
-            //Filter Section
-
-                //Mid
-            std::make_unique<juce::AudioParameterFloat>("cutoffmid", "cutoffMid", juce::NormalisableRange<float> {20.f, 20000.0f, 0.0001f, 0.6f}, 200.f),  // <-creates skew factor  
-            std::make_unique<juce::AudioParameterFloat>("resonancemid", "ResonanceMid", 0.1, 0.7f, 0.0001),                                                //   (more of the dial
-            std::make_unique<juce::AudioParameterChoice>("modemid", "Filter Type Mid", juce::StringArray("LPF", "BPF", "HPF"), 0),                         //   affects lower side)
-
-                //Side
-            std::make_unique<juce::AudioParameterFloat>("cutoffside", "cutoffSide", juce::NormalisableRange<float> {20.f, 20000.0f, 0.0001f, 0.6f}, 200.f), // skew factor again
-            std::make_unique<juce::AudioParameterFloat>("resonanceside", "ResonanceSide", 0.1, 0.7, 0.0001f),
-            std::make_unique<juce::AudioParameterChoice>("modeside", "Filter Type Side", juce::StringArray("LPF", "BPF", "HPF"), 0),
-
-           //Delay  Section
-                            
-                //Mid
-           std::make_unique<juce::AudioParameterFloat>("sendmid", "SendMid", 0.f, 1.f, 0.f), //controls dry/wet of signal
-           std::make_unique<juce::AudioParameterFloat>("timemid", "TimeMid", 0.f, 20000.f, 0.f), // Delay time in samples
-           std::make_unique<juce::AudioParameterFloat>("lfospeedmid", "LFOSpeedMid", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f), //in Hertz
-           std::make_unique<juce::AudioParameterFloat>("lfodepthmid", "LFODepthMid", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in miliseconds (since it modulates time) Again skew factor
-           std::make_unique<juce::AudioParameterChoice>("waveformmid", "WaveformMid", juce::StringArray("Sine", "Triangle", "Sawtooth", "Square", "Random", "Sample & Hold"), 0),
-           std::make_unique<juce::AudioParameterFloat>("feedbackmid", "FeedbackMid", 0.f, 0.9f, 0.0001f),
-
-                //Side
-           std::make_unique<juce::AudioParameterFloat>("sendside", "SendSide", 0.f, 1.f, 0.f),
-           std::make_unique<juce::AudioParameterFloat>("timeside", "TimeSide", 0.f, 20000.f, 0.f), // In samples
-           std::make_unique<juce::AudioParameterFloat>("lfospeedside", "LFOSpeedSide", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f),
-           std::make_unique<juce::AudioParameterFloat>("lfodepthside", "LFODepthSide", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f),
-           std::make_unique<juce::AudioParameterChoice>("waveformside", "WaveformSide", juce::StringArray("Sine", "Triangle", "Sawtooth", "Square", "Random", "Sample & Hold"), 0),
-           std::make_unique<juce::AudioParameterFloat>("feedbackside", "FeedbackSide", 0.f, 0.9f, 0.0001f),
-                           })
+           std::make_unique<juce::AudioParameterFloat>("send", "Send", 0.f, 1.f, 0.f), //controls dry/wet of signal
+           std::make_unique<juce::AudioParameterFloat>("time", "Time", 0.f, 20000.f, 0.f), // Delay time in samples
+           std::make_unique<juce::AudioParameterFloat>("lfospeed", "LFOSpeed", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f), //in Hertz
+           std::make_unique<juce::AudioParameterFloat>("lfodepth", "LFODepth", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in miliseconds (since it modulates time) Again skew factor
+           std::make_unique<juce::AudioParameterChoice>("waveform", "Waveform", juce::StringArray("Sine", "Triangle", "Sawtooth", "Square", "Random", "Sample & Hold"), 0),
+           std::make_unique<juce::AudioParameterFloat>("feedback", "Feedback", 0.f, 0.9f, 0.0001f),
+         })
 #endif
 {
-    const juce::StringArray params = { "stereowidth", "input", "output", //Width Section
-                                       "cutoffmid", "resonancemid", "modemid", //Filter Section -> Mid
-                                       "cutoffside", "resonanceside", "modeside", //Filter Section -> Side
-                                       "sendmid", "timemid", "lfospeedmid", "lfodepthmid", "waveformmid", "feedbackmid", //Delay section -> Mid
-                                       "sendside", "timeside", "lfospeedside", "lfodepthside", "waveformside","feedbackside"};//Delay section -> Side
-    for (int i = 0; i <= 21; i++)
+    const juce::StringArray params = { "send", "time", "lfospeed", "lfodepth", "waveform", "feedback"};
+    for (int i = 0; i <= 6; i++)
     {
         //adds a listener to each parameter in the array.
         treeState.addParameterListener(params[i], this);
@@ -144,36 +111,17 @@ void MSUtilityAudioProcessor::changeProgramName (int index, const juce::String& 
 //==============================================================================
 void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    
-
-
     juce::dsp::ProcessSpec spec;                     // Here we create the processSpec type spec variable, 
     spec.maximumBlockSize = samplesPerBlock;         // which holds samples per block of audio, 
     spec.sampleRate = sampleRate;                    // sample rate and number of outputs to be passed to
     spec.numChannels = getTotalNumOutputChannels();  // the prepare function of other DSP modules
 
-    // Filter Modules initialization                    << Like filters here
-
-    MidFilterModule.reset();
-    SideFilterModule.reset();
-    MidFilterModule.prepare(spec);                   
-    SideFilterModule.prepare(spec);
-
-    // LFO initialization
-
-    lfoMid.prepare(spec);
-    lfoSide.prepare(spec);
-
-    //lfoMid.setWaveform(Osc::Random);
-    //lfoSide.setWaveform(Osc::SH);
+    lfoOsc.prepare(spec);
 
     // Delay Modules Initializiation                    << Delays here and so on...
 
-    MidDelayModule.reset();
-    SideDelayModule.reset();
-    MidDelayModule.prepare(spec);
-    SideDelayModule.prepare(spec);
-
+    delayModule.reset();
+    delayModule.prepare(spec);
 
     //SmoothedValues -> Creates linear interpolation in parameter changes.
     
@@ -181,16 +129,9 @@ void MSUtilityAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBl
 
         //GUI
 
-    Width_Target.reset(sampleRate, rampTime);
-
-    Time_Mid_Target.reset(sampleRate, rampTime);
-    Time_Side_Target.reset(sampleRate, rampTime);
-
-    LFO_Depth_Mid_Target.reset(sampleRate, rampTime);
-    LFO_Depth_Side_Target.reset(sampleRate, rampTime);
-    LFO_Speed_Mid_Target.reset(sampleRate, rampTime);
-    LFO_Speed_Side_Target.reset(sampleRate, rampTime);
-          
+    timeTargetTemp.reset(sampleRate, rampTime);
+    LFODepthTarget.reset(sampleRate, rampTime);
+    LFOSpeedTarget.reset(sampleRate, rampTime);          
 }
 
 void MSUtilityAudioProcessor::releaseResources()
@@ -223,113 +164,41 @@ bool MSUtilityAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts
 }
 #endif
 
-void MSUtilityAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
+void MSUtilityAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
     juce::ScopedNoDenormals noDenormals;
-    auto totalNumInputChannels  = getTotalNumInputChannels();
+    auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
     double sampeleratero = getSampleRate();
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) // Clears channels from trash data
-        buffer.clear (i, 0, buffer.getNumSamples());
+        buffer.clear(i, 0, buffer.getNumSamples());
     {
-            
-            auto* channelDataLeft = buffer.getWritePointer(0);
-            auto* channelDataRight = buffer.getWritePointer(1);
+        auto* channelDataLeft = buffer.getWritePointer(0);
+        auto* channelDataRight = buffer.getWritePointer(1);
 
-            for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
-            {                                           
-               
-               // Input Selection
-                                
-               Width = Width_Target.getNextValue(); // gets value from ramp
-                                                        
-               if (Input_Type == "Stereo") // Mid/Side encoding and Stereo Widening   
-               {
-                   xMidRaw = (2 - Width) * (channelDataLeft[sample] + channelDataRight[sample]);
-                   xSideRaw = Width * (channelDataLeft[sample] - channelDataRight[sample]);
-               }               
+        for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
+        {
+            // Mono Signal
+            float monoIn = channelDataLeft[sample] + channelDataRight[sample];
 
-               else   // Or Simply Mid/Side Mixer if input is Mid/Side
-               {
-                   xMidRaw = channelDataLeft[sample] * (2 - Width);
-                   xSideRaw = channelDataRight[sample] * (Width);
-               }
+            // LFO Phase Calculation <- needed for LFOs
+            lfoOut = lfoOsc.output(LFOSpeedTarget.getNextValue(), LFODepthTarget.getNextValue(), &monoIn);
 
-               // Volume Control
+            // Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
+            timeTemp = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(timeTargetTemp.getNextValue() + lfoOut);
 
-               xMidRaw *= 0.5;
-               xSideRaw *= 0.5;
+            // Delay
 
-               // Filtering
+            float dry = monoIn;
+            float wet = delayModule.popSample(0, timeTemp);                 // Read a delayed sample
+            delayModule.pushSample(0, monoIn + (wet * feedbackTemp));       // Write a sample into buffer + feedback
+            float monoOut = (dry * (sendTemp - 1)) + (wet * sendTemp);         // Dry + Wet signals
 
-               const float xMidFilt = MidFilterModule.processSample(0, xMidRaw);
-               const float xSideFilt = SideFilterModule.processSample(0, xSideRaw);
-
-               //LFO Phase Calculation <- needed for LFOs
-
-               lfoValueMid = lfoMid.output(LFO_Speed_Mid_Target.getNextValue(), LFO_Depth_Mid_Target.getNextValue(), &xMidRaw);
-               lfoValueSide = lfoSide.output(LFO_Speed_Side_Target.getNextValue(), LFO_Depth_Side_Target.getNextValue(), &xSideRaw);
-
-               //Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
-
-               Time_Side = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Side_Target.getNextValue() + lfoValueSide);
-               Time_Mid =  [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(Time_Mid_Target.getNextValue() + lfoValueMid);
-
-               //Mid Delay
-                
-               float dry = xMidFilt;                                                
-               float wet = MidDelayModule.popSample(0, Time_Mid);                   // Read a delayed sample
-               MidDelayModule.pushSample(0, xMidFilt + (wet * Feedback_Mid));       // Write a sample into buffer + feedback
-               float xMid = (dry * (Send_Mid - 1)) + (wet * Send_Mid);              // Dry + Wet signals
-
-               //Side Delay
-
-               dry = xSideFilt;
-               wet = SideDelayModule.popSample(0, Time_Side);
-               SideDelayModule.pushSample(0, xSideFilt + (wet * Feedback_Side));
-               float xSide = (dry * (Send_Side - 1)) + (wet * Send_Side);
-
-               // Output Handling
-
-               if (Output_Type == "Stereo")
-               { 
-                    
-                    newLeft = xMid + xSide;                                                                 
-                    newRight = xMid - xSide;
-
-
-                    if (Input_Type == "Stereo") // If Stereo i/o -> Volume control
-                    {
-                        float volumeScale;
-
-                        if (Width <= 1.f)
-                        {
-                            volumeScale = juce::jmap(Width, 1.0f, 0.0f, 0.0f, -6.0f);
-                        }
-                        else
-                        {
-                            volumeScale = juce::jmap(Width, 1.0f, 0.0f, 0.0f, 4.f);
-                        }
-
-                        channelDataLeft[sample] = newLeft * juce::Decibels::decibelsToGain(volumeScale);
-                        channelDataRight[sample] = newRight * juce::Decibels::decibelsToGain(volumeScale);                     
-                    }
-
-                    else
-                    {
-                    channelDataLeft[sample] = newLeft;
-                    channelDataRight[sample] = newRight;
-                    }
-                    
-               }
-               else // output == mid/side
-               {    // Channels Are Left in Mid and Right in Side                                     
-                    channelDataLeft[sample] = xMid;
-                    channelDataRight[sample] = xSide;
-               }
-            }
-     
+            // Output Handling
+            channelDataLeft[sample] = monoOut;
+            channelDataRight[sample] = monoOut;
+        }
     }
 }
 
@@ -354,8 +223,6 @@ void MSUtilityAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
     auto state = treeState.copyState();
     std::unique_ptr<juce::XmlElement> xml(state.createXml());
     copyXmlToBinary(*xml, destData);
-
-
 }
 
 void MSUtilityAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
@@ -368,7 +235,6 @@ void MSUtilityAudioProcessor::setStateInformation (const void* data, int sizeInB
     if (xmlState.get() != nullptr)
         if (xmlState->hasTagName(treeState.state.getType()))
             treeState.replaceState(juce::ValueTree::fromXml(*xmlState));
-
 }
 
 //Function called when parameter is changed
@@ -376,199 +242,52 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
 {
     // Here we detect changes made by parameterIDs in the editor for processing in the processBlock.
 
-    // Width and Input Section
-
-    if (parameterID == "stereowidth")
-
-        Width_Target.setTargetValue(newValue);       
-
-    else if (parameterID == "input")
+    if (parameterID == "send")
     {
-        switch ((int)newValue) // Something happens to Input_Type
-        {
-        case 0:
-              Input_Type = "Stereo";
-            break;
-        case 1:
-            Input_Type = "Mid/Side";
-            break;
-        }
+        sendTemp = newValue;
     }
-
-    else if (parameterID == "output")
+    else if (parameterID == "time")
     {
-        switch ((int)newValue)
-        {
-        case 0:
-            Output_Type = "Stereo";
-            break;
-        case 1:
-            Output_Type = "Mid/Side";
-            break;
-        }
+
+        timeTargetTemp.setTargetValue(newValue);
+
     }
-
-    //Filter Section
-
-        //Mid
-
-    else if (parameterID == "cutoffmid")
-    { 
-        Cut_Off_Mid = newValue;
-        MidFilterModule.setCutoffFrequency(Cut_Off_Mid);
-    }
-
-    else if (parameterID == "modemid")
+    else if (parameterID == "lfospeed")
     {
-        switch ((int)newValue) // Something happens to Input_Type
-        {
-        case 0:
-            MidFilterModule.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
-            break;
-        case 1:
-            MidFilterModule.setType(juce::dsp::StateVariableTPTFilterType::bandpass);
-            break;
-        case 2:
-            MidFilterModule.setType(juce::dsp::StateVariableTPTFilterType::highpass);
-            break;
-        }
+        LFOSpeedTarget.setTargetValue(newValue);
     }
-
-    else if (parameterID == "resonancemid")
+    else if (parameterID == "lfodepth")
     {
-        MidFilterModule.setResonance(newValue);
-    }
- 
-
-        //Side
-
-    else if (parameterID == "cutoffside")
-    {
-        Cut_Off_Side = newValue;
-        SideFilterModule.setCutoffFrequency(Cut_Off_Side);
+        LFODepthTarget.setTargetValue(newValue);
     }
 
-    else if (parameterID == "modeside")
-    {
-        switch ((int)newValue) // Something happens to Input_Type
-        {
-        case 0:
-            SideFilterModule.setType(juce::dsp::StateVariableTPTFilterType::lowpass);
-            break;
-        case 1:
-            SideFilterModule.setType(juce::dsp::StateVariableTPTFilterType::bandpass);
-            break;
-        case 2:
-            SideFilterModule.setType(juce::dsp::StateVariableTPTFilterType::highpass);
-            break;
-        }
-    }
-
-    else if (parameterID == "resonanceside")
-    {
-        SideFilterModule.setResonance(newValue);
-    }
-
-
-    //Delay Section
-
-
-        //Mid
-    else if (parameterID == "sendmid")
-    {
-        Send_Mid = newValue;
-    }
-    else if (parameterID == "timemid")
-    {
-                                      
-        Time_Mid_Target.setTargetValue(newValue);
-
-    }
-    else if (parameterID == "lfospeedmid")
-    {
-        LFO_Speed_Mid_Target.setTargetValue(newValue);
-    }
-    else if (parameterID == "lfodepthmid")
-    {
-        LFO_Depth_Mid_Target.setTargetValue(newValue);
-    }
-
-    else if (parameterID == "waveformmid")
+    else if (parameterID == "waveform")
     {
         switch ((int)newValue)
         {
         case 0:
-            lfoMid.setWaveform(Osc::Waveform::Sine);
+            lfoOsc.setWaveform(Osc::Waveform::Sine);
             break;
         case 1:
-            lfoMid.setWaveform(Osc::Waveform::Triangle);
+            lfoOsc.setWaveform(Osc::Waveform::Triangle);
             break;
         case 2:
-            lfoMid.setWaveform(Osc::Waveform::Sawtooth);
+            lfoOsc.setWaveform(Osc::Waveform::Sawtooth);
             break;
         case 3:
-            lfoMid.setWaveform(Osc::Waveform::Square);
+            lfoOsc.setWaveform(Osc::Waveform::Square);
             break;
         case 4:
-            lfoMid.setWaveform(Osc::Waveform::Random);
+            lfoOsc.setWaveform(Osc::Waveform::Random);
             break;
         case 5:
-            lfoMid.setWaveform(Osc::Waveform::SH);
+            lfoOsc.setWaveform(Osc::Waveform::SH);
             break;
         }
     }
-
-    else if (parameterID == "feedbackmid")
+    else if (parameterID == "feedback")
     {
-        Feedback_Mid = newValue;
-    }
-        //Side
-    else if (parameterID == "sendside")
-    {
-        Send_Side = newValue;
-    }
-    else if (parameterID == "timeside")
-    {
-        Time_Side_Target.setTargetValue(newValue);
-
-    }
-    else if (parameterID == "lfospeedside")
-    {
-        LFO_Speed_Side_Target.setTargetValue(newValue);
-    }
-    else if (parameterID == "lfodepthside")
-    {
-        LFO_Depth_Side_Target.setTargetValue(newValue);
-    }
-
-    else if (parameterID == "waveformside")
-    {
-        switch ((int)newValue)
-        {
-        case 0:
-            lfoSide.setWaveform(Osc::Waveform::Sine);
-            break;
-        case 1:
-            lfoSide.setWaveform(Osc::Waveform::Triangle);
-            break;
-        case 2:
-            lfoSide.setWaveform(Osc::Waveform::Sawtooth);
-            break;
-        case 3:
-            lfoSide.setWaveform(Osc::Waveform::Square);
-            break;
-        case 4:
-            lfoSide.setWaveform(Osc::Waveform::Random);
-            break;
-        case 5:
-            lfoSide.setWaveform(Osc::Waveform::SH);
-            break;
-        }
-    }
-
-    else if (parameterID == "feedbackside")
-    {
-        Feedback_Side = newValue;
+        feedbackTemp = newValue;
     }
 }
 
