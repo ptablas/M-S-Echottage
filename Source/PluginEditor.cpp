@@ -14,6 +14,8 @@ MSUtilityAudioProcessorEditor::MSUtilityAudioProcessorEditor
 (MSUtilityAudioProcessor& p, juce::AudioProcessorValueTreeState& vts)
     : AudioProcessorEditor (&p), audioProcessor (p), treeState(vts)
 {
+    startTimerHz(60);
+
     // Custom Components
     addAndMakeVisible (checkBackground);
     addAndMakeVisible (woodFrame);
@@ -156,4 +158,9 @@ void MSUtilityAudioProcessorEditor::resized()
     LFODepthDial.setPopupDisplayEnabled(true, true, NULL, 2000);
     LFOSpeedDial.setPopupDisplayEnabled(true, true, NULL, 2000);
     waveformDial.setPopupDisplayEnabled(true, true, NULL, 2000);
+}
+
+void MSUtilityAudioProcessorEditor::timerCallback()
+{
+    oscilloscope.popSample(audioProcessor.getTimeModulation());
 }

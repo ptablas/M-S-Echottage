@@ -55,7 +55,7 @@
       <CONFIGURATIONS>
         <CONFIGURATION isDebug="1" name="Debug" enablePluginBinaryCopyStep="1" vst3BinaryLocation="C:\Users\pablo\Documents\ReaperPlugins"
                        targetName="Ek0" binaryPath="C:\Users\pablo\Documents\ReaperPlugins"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="Ek0"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="Ek0" useRuntimeLibDLL="1"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="../../juce"/>

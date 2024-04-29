@@ -24,21 +24,22 @@ MSUtilityAudioProcessor::MSUtilityAudioProcessor()
     ), treeState(*this, nullptr, juce::Identifier("PARAMETERS"),
         {
            // Definition of parameters IDs, ranges and starting values to be passed to TreeState
-
-           std::make_unique<juce::AudioParameterFloat>("send", "Send", 0.f, 1.f, 0.f), //controls dry/wet of signal
+           std::make_unique<juce::AudioParameterFloat>("send", "Send", 0.f, 1.f, 0.f), // controls dry/wet of signal
            std::make_unique<juce::AudioParameterFloat>("time", "Time", 0.f, 20000.f, 0.f), // Delay time in samples
            std::make_unique<juce::AudioParameterFloat>("lfospeed", "LFOSpeed", juce::NormalisableRange<float> {0.f, 10.f, 0.0001f, 0.6f}, 0.f), //in Hertz
            std::make_unique<juce::AudioParameterFloat>("lfodepth", "LFODepth", juce::NormalisableRange<float> {0.f, 20000.f / 2.f, 0.0001f, 0.6f}, 0.f), // in miliseconds (since it modulates time) Again skew factor
            std::make_unique<juce::AudioParameterChoice>("waveform", "Waveform", juce::StringArray("Sine", "Triangle", "Sawtooth", "Square", "Random", "Sample & Hold"), 0),
            std::make_unique<juce::AudioParameterFloat>("feedback", "Feedback", 0.f, 0.9f, 0.0001f),
+           std::make_unique<juce::AudioParameterFloat>("timemod", "TimeMod", 0.f, 40000.f, 0.f),
          })
 #endif
 {
-    const juce::StringArray params = { "send", "time", "lfospeed", "lfodepth", "waveform", "feedback"};
-    for (int i = 0; i <= 6; i++)
+    const juce::StringArray params = { "send", "time", "lfospeed", "lfodepth", "waveform", "feedback", "timemod"};
+
+    for (auto& parameter : params)
     {
         //adds a listener to each parameter in the array.
-        treeState.addParameterListener(params[i], this);
+        treeState.addParameterListener(parameter, this);
     }
 }
 
@@ -169,7 +170,6 @@ void MSUtilityAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
-    double sampeleratero = getSampleRate();
 
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i) // Clears channels from trash data
         buffer.clear(i, 0, buffer.getNumSamples());
@@ -180,20 +180,29 @@ void MSUtilityAudioProcessor::processBlock(juce::AudioBuffer<float>& buffer, juc
         for (int sample = 0; sample < buffer.getNumSamples(); ++sample) // Sample Processing
         {
             // Mono Signal
-            float monoIn = channelDataLeft[sample] + channelDataRight[sample];
+            float monoIn = (channelDataLeft[sample] + channelDataRight[sample]);
 
             // LFO Phase Calculation <- needed for LFOs
             lfoOut = lfoOsc.output(LFOSpeedTarget.getNextValue(), LFODepthTarget.getNextValue(), &monoIn);
 
-            // Time Modulation -> Time Ramped Value added to LFOs'; lambda makes value always positive
-            timeTemp = [](double Time) {if (Time >= 0) { return Time; } else { return -Time; }  }(timeTargetTemp.getNextValue() + lfoOut);
+            //static int counter = 0;
+
+            //if (counter == 441)
+            //{
+            //    DBG(lfoOut);
+            //    counter = 0;
+            //}
+            //else
+            //    ++counter;
+
+            // Time Modulation -> Time Ramped Value added to LFOs;
+            timeTemp = std::abs(timeTargetTemp.getNextValue() + lfoOut);
 
             // Delay
-
             float dry = monoIn;
             float wet = delayModule.popSample(0, timeTemp);                 // Read a delayed sample
             delayModule.pushSample(0, monoIn + (wet * feedbackTemp));       // Write a sample into buffer + feedback
-            float monoOut = (dry * (sendTemp - 1)) + (wet * sendTemp);         // Dry + Wet signals
+            float monoOut = (dry * (sendTemp - 1)) + (wet * sendTemp);      // Dry + Wet signals
 
             // Output Handling
             channelDataLeft[sample] = monoOut;
@@ -289,6 +298,11 @@ void MSUtilityAudioProcessor::parameterChanged(const juce::String& parameterID, 
     {
         feedbackTemp = newValue;
     }
+}
+
+double MSUtilityAudioProcessor::getTimeModulation()
+{
+    return timeTemp;
 }
 
 

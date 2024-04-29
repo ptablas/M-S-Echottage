@@ -40,7 +40,6 @@ public:
             oscilloscopeData.pop_front();
         }
 
-
         g.saveState(); // Save the current state of the Graphics context
 
         // Define the center and radius of the circle
@@ -56,10 +55,9 @@ public:
 
         // Use the Path as a clip region
         g.reduceClipRegion(circlePath);
-
         g.setGradientFill(lineGradient);
 
-        float lineThickness = 4.5f; // Change this to your desired line thickness
+        float lineThickness = 9.f; // Change this to your desired line thickness
 
         // Draw lines directly
         for (int i = 1; i < oscilloscopeData.size(); ++i)
@@ -67,15 +65,27 @@ public:
             const float scale = w / oscilloscopeData.size();
             const int mappedPixel = i * scale;
             const int previousMappedPixel = (i - 1) * scale;
-            const float value = oscilloscopeData[i] + verticalCentre;
-            const float previousValue = oscilloscopeData[i - 1] + verticalCentre;
-            g.drawLine(previousMappedPixel, previousValue, mappedPixel, value, lineThickness);
-        }
 
+            // we have to get this value within the range 0 to getHeight(), where VerticalCentre should be the middle : currently 0 - 40000
+            const float value = oscilloscopeData[i];
+            const float previousValue = oscilloscopeData[i - 1];
+
+            // Adjust the y-axis offset
+            const int yOffset = 235;
+            const int yMax = 15000;
+
+            // Map the value to the screen height, considering the y-axis offset
+            const int valueMapped = (int)juce::jmap<float>(value, 0, yMax, yOffset, 0);
+            const int previousValueMapped = (int)juce::jmap<float>(previousValue, 0, yMax, yOffset, 0);
+
+            // Draw the line
+            g.drawLine(previousMappedPixel, previousValueMapped + yOffset, mappedPixel, valueMapped + yOffset, lineThickness);
+        }
+ 
         g.restoreState(); // Restore the Graphics context to its original state
     }
 
 private:
     std::deque<float> oscilloscopeData;
-    int oscilloscopeResolution = 500; // Adjust this to your desired resolution
+    int oscilloscopeResolution = 60; // Adjust this to your desired resolution
 };

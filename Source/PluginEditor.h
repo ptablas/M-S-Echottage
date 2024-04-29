@@ -18,7 +18,8 @@
 //==============================================================================
 /**
 */
-class MSUtilityAudioProcessorEditor  : public juce::AudioProcessorEditor
+class MSUtilityAudioProcessorEditor  : public juce::AudioProcessorEditor,
+                                       public juce::Timer
 {
 public: 
     MSUtilityAudioProcessorEditor (MSUtilityAudioProcessor&,
@@ -28,6 +29,7 @@ juce::AudioProcessorValueTreeState&);
     //==============================================================================
     void paint (juce::Graphics&) override;
     void resized() override;
+    void timerCallback() override;
 
 private:
     // Sliders and ComboBoxes

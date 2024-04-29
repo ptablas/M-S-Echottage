@@ -57,6 +57,8 @@ public:
 
     void parameterChanged(const juce::String& parameterID, float newValue) override;
 
+    double getTimeModulation();
+
 private:
     juce::AudioProcessorValueTreeState treeState;
 
